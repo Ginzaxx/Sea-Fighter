@@ -5,28 +5,47 @@ public class EnemySpawner : MonoBehaviour
 {
     [Header("Pool Settings")]
     [SerializeField] private Enemy enemyPrefab;
-    [SerializeField] private int poolSize = 10;
+    private int poolSize = 4;
     
     [Header("Spawn Settings")]
     [SerializeField] private Transform[] spawnPoints;
-    [SerializeField] private float spawnInterval = 2f;
+    [SerializeField] private float initialSpawnInterval = 2f;
+    [SerializeField] private float minSpawnInterval = 0.75f;
+    [SerializeField] private float intervalDecreasePerSecond = 0.02f; // Berkurang per detik
     [SerializeField] private float enemySpeed = 5f;
 
+    [Header("Debug/Monitor")]
+    [SerializeField] private float currentSpawnInterval;
+    private float spawnTimer;
+
     private List<Enemy> enemyPool;
-    private float timer;
 
     void Start()
     {
+        currentSpawnInterval = initialSpawnInterval;
         InitializePool();
     }
 
     void Update()
     {
-        timer += Time.deltaTime;
-        if (timer >= spawnInterval)
+        // Berhenti spawn jika game sudah selesai (menang/kalah)
+        if (GameOverManager.Instance != null && GameOverManager.Instance.IsGameFinished) 
+            return;
+
+        // Update timer spawn
+        spawnTimer += Time.deltaTime;
+        
+        // Kurangi interval spawn seiring berjalannya waktu (per detik)
+        if (currentSpawnInterval > minSpawnInterval)
+        {
+            currentSpawnInterval -= intervalDecreasePerSecond * Time.deltaTime;
+            currentSpawnInterval = Mathf.Max(currentSpawnInterval, minSpawnInterval);
+        }
+
+        if (spawnTimer >= currentSpawnInterval)
         {
             SpawnEnemy();
-            timer = 0;
+            spawnTimer = 0;
         }
     }
 
@@ -55,6 +74,7 @@ public class EnemySpawner : MonoBehaviour
 
     private Enemy GetEnemyFromPool()
     {
+        // Perbaikan syntax error pada foreach
         foreach (Enemy enemy in enemyPool)
         {
             if (!enemy.gameObject.activeInHierarchy)
@@ -62,6 +82,6 @@ public class EnemySpawner : MonoBehaviour
                 return enemy;
             }
         }
-        return null; // Bisa dikembangkan untuk menambah pool jika kurang
+        return null;
     }
 }
