@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (!GameOverManager.Instance.IsGameFinished) return;
+        if (GameOverManager.Instance.IsGameFinished) return;
 
         Velocity = InputManager.Instance.MoveInput;
         
