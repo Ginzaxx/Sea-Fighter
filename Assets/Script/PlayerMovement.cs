@@ -1,13 +1,17 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(BoxCollider2D))]
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D Rb2D;
     [SerializeField] private Vector2 Velocity;
+    [SerializeField] private bool isDead;
 
     void Start()
     {
+        isDead = false;
+
         Rb2D = GetComponent<Rigidbody2D>();
     }
 
@@ -22,6 +26,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
+            isDead = true;
+
             GameOverManager.Instance.PlayerDied();
         }
     }
