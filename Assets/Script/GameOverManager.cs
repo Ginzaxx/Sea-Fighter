@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using TMPro; // Diperlukan untuk TextMeshPro
+using TMPro;
 using System.Collections;
 
 public class GameOverManager : MonoBehaviour
@@ -10,7 +10,7 @@ public class GameOverManager : MonoBehaviour
     [SerializeField] private float survivalGoalTime = 60f;
     [SerializeField] private string mainMenuSceneName = "Main Menu";
 
-    [Header("UI Elements")]
+    [Header("Game Over UI")]
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private TextMeshProUGUI resultText;
     
@@ -23,10 +23,12 @@ public class GameOverManager : MonoBehaviour
     [SerializeField] private RectTransform playAgainBtnRect;
     [SerializeField] private Image mainMenuBtnImage;
     [SerializeField] private Image playAgainBtnImage;
+    [SerializeField] private int selectedGameOverIndex = 1; // 0: Main Menu, 1: Play Again
+    [SerializeField] private float selectionInput;
     [SerializeField] private float selectedScale = 1.2f;
     [SerializeField] private float normalScale = 1.0f;
-    [SerializeField] private Color pressedColor = new Color(0.5f, 0.5f, 0.5f, 1f);
     [SerializeField] private float loadDelay = 0.5f;
+    [SerializeField] private Color pressedColor = new(0.5f, 0.5f, 0.5f, 1f);
 
     [Header("Score Settings")]
     [SerializeField] private TextMeshProUGUI scoreText;
@@ -44,8 +46,6 @@ public class GameOverManager : MonoBehaviour
     [SerializeField] private bool isGameStarted = false;
     private bool isTransitioning = false;
 
-    private int selectedGameOverIndex = 1; // 0: Main Menu, 1: Play Again
-
     public static GameOverManager Instance { get; private set; }
     public bool IsGameFinished => isGameFinished;
     public bool IsGameStarted  => isGameStarted;
@@ -58,6 +58,18 @@ public class GameOverManager : MonoBehaviour
         else Destroy(gameObject);
 
         if (gameOverPanel != null) gameOverPanel.SetActive(false);
+    }
+
+    void OnEnable()
+    {
+        InputManager.Instance.OnMoveOn += OnMoveOn;
+        InputManager.Instance.OnConfirm += OnConfirm;
+    }
+
+    void OnDisable()
+    {
+        InputManager.Instance.OnMoveOn -= OnMoveOn;
+        InputManager.Instance.OnConfirm -= OnConfirm;
     }
 
     private void Start()
@@ -111,32 +123,33 @@ public class GameOverManager : MonoBehaviour
         }
     }
 
+    private void OnMoveOn()
+    {
+        if (!isGameFinished) return;
+
+        selectionInput = InputManager.Instance.MoveInput.x;
+        
+        if (selectionInput > 0) selectedGameOverIndex = 1;
+        if (selectionInput < 0) selectedGameOverIndex = 0;
+    }
+
+    private void OnConfirm()
+    {
+        if (!isGameFinished) return;
+
+        if (selectedGameOverIndex == 0) StartCoroutine(LoadSceneRoutine(mainMenuSceneName, mainMenuBtnImage));
+        else StartCoroutine(LoadSceneRoutine(SceneManager.GetActiveScene().name, playAgainBtnImage));
+    }
+
     private void HandleGameOverInput()
     {
-        if (UnityEngine.InputSystem.Keyboard.current == null) return;
-
-        // Navigasi A (Kiri) dan D (Kanan)
-        if (UnityEngine.InputSystem.Keyboard.current.aKey.wasPressedThisFrame)
-        {
-            selectedGameOverIndex = 0;
-        }
-        if (UnityEngine.InputSystem.Keyboard.current.dKey.wasPressedThisFrame)
-        {
-            selectedGameOverIndex = 1;
-        }
+        if (!isGameFinished) return;
 
         // Visual Feedback Scaling
         if (mainMenuBtnRect != null)
             mainMenuBtnRect.localScale = Vector3.Lerp(mainMenuBtnRect.localScale, Vector3.one * (selectedGameOverIndex == 0 ? selectedScale : normalScale), Time.deltaTime * 10f);
         if (playAgainBtnRect != null)
             playAgainBtnRect.localScale = Vector3.Lerp(playAgainBtnRect.localScale, Vector3.one * (selectedGameOverIndex == 1 ? selectedScale : normalScale), Time.deltaTime * 10f);
-
-        // Konfirmasi
-        if (UnityEngine.InputSystem.Keyboard.current.enterKey.wasPressedThisFrame)
-        {
-            if (selectedGameOverIndex == 0) StartCoroutine(LoadSceneRoutine(mainMenuSceneName, mainMenuBtnImage));
-            else StartCoroutine(LoadSceneRoutine(SceneManager.GetActiveScene().name, playAgainBtnImage));
-        }
     }
 
     private IEnumerator LoadSceneRoutine(string sceneName, Image buttonImage)

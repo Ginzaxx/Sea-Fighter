@@ -11,13 +11,13 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private RectTransform exitButtonRect;
     [SerializeField] private Image playButtonImage;
     [SerializeField] private Image exitButtonImage;
+    [SerializeField] private float selectionInput;
 
     [Header("Feedback Settings")]
     [SerializeField] private float selectedScale = 3.2f;
     [SerializeField] private float normalScale = 3.0f;
     [SerializeField] private float scaleSpeed = 10f;
     [SerializeField] private float loadDelay = 0.5f;
-    // [SerializeField] private float selectionInput;
     [SerializeField] private Color pressedColor = new(0.5f, 0.5f, 0.5f, 1f);
 
     [Header("Scene Settings")]
@@ -40,8 +40,6 @@ public class MainMenuManager : MonoBehaviour
 
     void Update()
     {
-        // selectionInput = InputManager.Instance.MoveInput.y;
-
         if (isTransitioning) return;
 
         ApplyVisualFeedback();
@@ -55,7 +53,11 @@ public class MainMenuManager : MonoBehaviour
 
     private void OnMoveOn()
     {
-        selectedIndex = (selectedIndex == 0) ? 1 : 0;
+        selectionInput = InputManager.Instance.MoveInput.y;
+
+        if (selectionInput > 0) selectedIndex = 0;
+        if (selectionInput < 0) selectedIndex = 1;
+
         Debug.Log("Selected: " + (selectedIndex == 0 ? "Play" : "Exit"));
     }
 
