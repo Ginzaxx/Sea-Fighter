@@ -47,7 +47,8 @@ public class GameOverManager : MonoBehaviour
     private int selectedGameOverIndex = 1; // 0: Main Menu, 1: Play Again
 
     public static GameOverManager Instance { get; private set; }
-    public bool IsGameFinished => isGameFinished || !isGameStarted;
+    public bool IsGameFinished => isGameFinished;
+    public bool IsGameStarted  => !isGameStarted;
     public float SurvivalGoalTime => survivalGoalTime;
     public float CurrentTimer => currentTimer;
 
