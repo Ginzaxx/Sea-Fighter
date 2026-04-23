@@ -17,9 +17,9 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (GameOverManager.Instance.IsGameFinished) return;
-
         Velocity = InputManager.Instance.MoveInput;
+
+        if (GameOverManager.Instance.IsGameFinished) Velocity = Vector2.zero;
         
         Rb2D.linearVelocity = new Vector2(Velocity.x, Rb2D.linearVelocityY);
     }
