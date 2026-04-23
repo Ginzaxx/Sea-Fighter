@@ -48,7 +48,7 @@ public class GameOverManager : MonoBehaviour
 
     public static GameOverManager Instance { get; private set; }
     public bool IsGameFinished => isGameFinished;
-    public bool IsGameStarted  => !isGameStarted;
+    public bool IsGameStarted  => isGameStarted;
     public float SurvivalGoalTime => survivalGoalTime;
     public float CurrentTimer => currentTimer;
 

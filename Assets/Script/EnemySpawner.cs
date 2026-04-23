@@ -28,8 +28,8 @@ public class EnemySpawner : MonoBehaviour
 
     void Update()
     {
-        // Berhenti spawn jika game sudah selesai (menang/kalah)
-        if (GameOverManager.Instance != null && GameOverManager.Instance.IsGameFinished) 
+        // Berhenti spawn jika game belum mulai atau sudah selesai
+        if (GameOverManager.Instance != null && (!GameOverManager.Instance.IsGameStarted || GameOverManager.Instance.IsGameFinished)) 
             return;
 
         // Update timer spawn
