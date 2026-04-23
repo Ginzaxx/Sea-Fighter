@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c4c38b7c8628dcb448f1f1911380deab
+guid: d96b7d5417b1dc548b214fbdc6bf888b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4028492697066002702
-    second: water layer 1_0
+      213: -7384831400567670874
+    second: Untitled 04-23-2026 11-09-41_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: water layer 1_0
+      name: Untitled 04-23-2026 11-09-41_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 32
-        height: 32
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e09dfdc93c418e730800000000000000
-      internalID: 4028492697066002702
+      spriteID: 6a7730bb7fec38990800000000000000
+      internalID: -7384831400567670874
       vertices: []
       indices: 
       edges: []
@@ -151,7 +151,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      water layer 1_0: 4028492697066002702
+      Untitled 04-23-2026 11-09-41_0: -7384831400567670874
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
