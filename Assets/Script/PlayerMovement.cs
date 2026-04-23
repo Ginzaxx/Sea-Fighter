@@ -17,14 +17,16 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (!GameOverManager.Instance.IsGameFinished) return;
+
         Velocity = InputManager.Instance.MoveInput;
         
         Rb2D.linearVelocity = new Vector2(Velocity.x, Rb2D.linearVelocityY);
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (collision.gameObject.CompareTag("Enemy"))
+        if (other.gameObject.CompareTag("Enemy"))
         {
             isDead = true;
 
