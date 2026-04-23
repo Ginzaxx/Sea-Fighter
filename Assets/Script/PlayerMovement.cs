@@ -2,11 +2,29 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(BoxCollider2D))]
+[RequireComponent(typeof(PlayerHealth))]
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("References")]
     [SerializeField] private Rigidbody2D Rb2D;
-    [SerializeField] private Vector2 Velocity;
+    [SerializeField] private Transform playerTF;
     [SerializeField] private PlayerHealth playerHealth;
+
+    [Header("Variables")]
+    [SerializeField] private float BoatInput;
+    [SerializeField] private bool IsUsingBaseInputs;
+
+    void OnEnable()
+    {
+        InputManager.Instance.OnMoveOn += OnMoveOn;
+        InputManager.Instance.OnConfirm += OnConfirm;
+    }
+
+    void OnDisable()
+    {
+        InputManager.Instance.OnMoveOn -= OnMoveOn;
+        InputManager.Instance.OnConfirm -= OnConfirm;
+    }
 
     void Start()
     {
@@ -16,11 +34,32 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        Velocity = InputManager.Instance.MoveInput;
+        if (IsUsingBaseInputs) return;
 
-        if (GameOverManager.Instance.IsGameFinished) Velocity = Vector2.zero;
+        BoatInput = InputManager.Instance.MoveInput.x;
+
+        if (GameOverManager.Instance.IsGameFinished) BoatInput = 0;
         
-        Rb2D.linearVelocity = new Vector2(Velocity.x, Rb2D.linearVelocityY);
+        Rb2D.linearVelocity = new Vector2(BoatInput, Rb2D.linearVelocityY);
+    }
+
+    private void OnMoveOn()
+    {
+        if (!IsUsingBaseInputs) return;
+
+        BoatInput = InputManager.Instance.MoveInput.x;
+
+        if (playerTF.transform.position.x <= 2 && playerTF.transform.position.x >= -2)
+        {
+            playerTF.transform.position = new Vector3(BoatInput * 2, 0, 0);
+        }
+    }
+
+    private void OnConfirm()
+    {
+        Debug.Log("Using Base Inputs");
+
+        IsUsingBaseInputs = !IsUsingBaseInputs;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
