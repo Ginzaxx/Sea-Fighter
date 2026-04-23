@@ -16,58 +16,52 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private float selectedScale = 3.2f;
     [SerializeField] private float normalScale = 3.0f;
     [SerializeField] private float scaleSpeed = 10f;
-    [SerializeField] private Color pressedColor = new Color(0.5f, 0.5f, 0.5f, 1f);
     [SerializeField] private float loadDelay = 0.5f;
+    // [SerializeField] private float selectionInput;
+    [SerializeField] private Color pressedColor = new(0.5f, 0.5f, 0.5f, 1f);
 
     [Header("Scene Settings")]
     [SerializeField] private string gameSceneName = "Main Game";
 
     private int selectedIndex = 0; // 0: Play, 1: Exit
     private bool isTransitioning = false;
-    private Color originalPlayColor;
-    private Color originalExitColor;
 
-    void Start()
+    void OnEnable()
     {
-        originalPlayColor = playButtonImage.color;
-        originalExitColor = exitButtonImage.color;
+        InputManager.Instance.OnMoveOn += OnMoveOn;
+        InputManager.Instance.OnConfirm += OnConfirm;
+    }
+
+    void OnDisable()
+    {
+        InputManager.Instance.OnMoveOn -= OnMoveOn;
+        InputManager.Instance.OnConfirm -= OnConfirm;
     }
 
     void Update()
     {
+        // selectionInput = InputManager.Instance.MoveInput.y;
+
         if (isTransitioning) return;
 
-        HandleNavigation();
-        HandleSelection();
         ApplyVisualFeedback();
     }
 
-    private void HandleNavigation()
+    private void OnConfirm()
     {
-        if (Keyboard.current == null) return;
-
-        // Gunakan wasPressedThisFrame agar tidak scrolling terlalu cepat
-        if (Keyboard.current.wKey.wasPressedThisFrame || Keyboard.current.sKey.wasPressedThisFrame)
-        {
-            selectedIndex = (selectedIndex == 0) ? 1 : 0;
-            Debug.Log("Selected: " + (selectedIndex == 0 ? "Play" : "Exit"));
-        }
+        if (selectedIndex == 0) StartCoroutine(PlayGameRoutine());
+        else StartCoroutine(ExitGameRoutine());
     }
 
-    private void HandleSelection()
+    private void OnMoveOn()
     {
-        if (Keyboard.current == null) return;
-
-        if (Keyboard.current.enterKey.wasPressedThisFrame)
-        {
-            if (selectedIndex == 0) StartCoroutine(PlayGameRoutine());
-            else StartCoroutine(ExitGameRoutine());
-        }
+        selectedIndex = (selectedIndex == 0) ? 1 : 0;
+        Debug.Log("Selected: " + (selectedIndex == 0 ? "Play" : "Exit"));
     }
 
     private void ApplyVisualFeedback()
     {
-        // Smooth scaling untuk feedback visual
+        // Smooth scaling for visual feedback
         float playTargetScale = (selectedIndex == 0) ? selectedScale : normalScale;
         float exitTargetScale = (selectedIndex == 1) ? selectedScale : normalScale;
 
@@ -78,10 +72,8 @@ public class MainMenuManager : MonoBehaviour
     private IEnumerator PlayGameRoutine()
     {
         isTransitioning = true;
-        
-        // Efek menggelap
         playButtonImage.color = pressedColor;
-        
+
         yield return new WaitForSeconds(loadDelay);
         SceneManager.LoadScene(gameSceneName);
     }
@@ -89,8 +81,6 @@ public class MainMenuManager : MonoBehaviour
     private IEnumerator ExitGameRoutine()
     {
         isTransitioning = true;
-
-        // Efek menggelap
         exitButtonImage.color = pressedColor;
 
         yield return new WaitForSeconds(loadDelay);
