@@ -5275,6 +5275,7 @@ GameObject:
   - component: {fileID: 983244914}
   - component: {fileID: 983244913}
   - component: {fileID: 983244912}
+  - component: {fileID: 983244918}
   m_Layer: 0
   m_Name: Player Boat
   m_TagString: Untagged
@@ -5294,9 +5295,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d1ac2c09f3bbcb46b0749d82ea1f66b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Rb2D: {fileID: 0}
+  Rb2D: {fileID: 983244914}
   Velocity: {x: 0, y: 0}
-  isDead: 0
+  playerHealth: {fileID: 983244918}
 --- !u!61 &983244913
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5462,6 +5463,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &983244918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 983244911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62166ff5ff5f1d74aa0ada3bc0929664, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 3
+  currentHealth: 0
+  invincibilityDuration: 1
+  flashInterval: 0.15
+  spriteRenderer: {fileID: 983244916}
 --- !u!1001 &999865807
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8495,7 +8513,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   survivalGoalTime: 10
-  reloadDelay: 5
   mainMenuSceneName: Main Menu
   gameOverPanel: {fileID: 1469622130}
   resultText: {fileID: 1003223592}

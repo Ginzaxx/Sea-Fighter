@@ -6,13 +6,12 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D Rb2D;
     [SerializeField] private Vector2 Velocity;
-    [SerializeField] private bool isDead;
+    [SerializeField] private PlayerHealth playerHealth;
 
     void Start()
     {
-        isDead = false;
-
         Rb2D = GetComponent<Rigidbody2D>();
+        if (playerHealth == null) playerHealth = GetComponent<PlayerHealth>();
     }
 
     void Update()
@@ -28,9 +27,15 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
-            isDead = true;
-
-            GameOverManager.Instance.PlayerDied();
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage(1);
+            }
+            else
+            {
+                // Fallback jika komponen health tidak ditemukan
+                GameOverManager.Instance.PlayerDied();
+            }
         }
     }
 }
