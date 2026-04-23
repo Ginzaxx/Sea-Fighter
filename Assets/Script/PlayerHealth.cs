@@ -15,10 +15,16 @@ public class PlayerHealth : MonoBehaviour
     [Header("Visual References")]
     [SerializeField] private SpriteRenderer spriteRenderer;
 
+    [Header("UI HP Settings")]
+    [SerializeField] private UnityEngine.UI.Image[] hpImages;
+    [SerializeField] private Color lostHealthColor = Color.gray;
+    [SerializeField] private Color fullHealthColor = Color.white;
+
     void Start()
     {
         currentHealth = maxHealth;
         if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
+        UpdateHPUI();
     }
 
     public void TakeDamage(int damage)
@@ -26,6 +32,7 @@ public class PlayerHealth : MonoBehaviour
         if (isInvincible) return;
 
         currentHealth -= damage;
+        UpdateHPUI();
         Debug.Log("Player HP: " + currentHealth);
 
         if (currentHealth <= 0)
@@ -35,6 +42,23 @@ public class PlayerHealth : MonoBehaviour
         else
         {
             StartCoroutine(BecomeInvincible());
+        }
+    }
+
+    private void UpdateHPUI()
+    {
+        if (hpImages == null) return;
+
+        for (int i = 0; i < hpImages.Length; i++)
+        {
+            if (i < currentHealth)
+            {
+                hpImages[i].color = fullHealthColor;
+            }
+            else
+            {
+                hpImages[i].color = lostHealthColor;
+            }
         }
     }
 
