@@ -8,7 +8,6 @@ public class GameOverManager : MonoBehaviour
 {
     [Header("Game Rules")]
     [SerializeField] private float survivalGoalTime = 60f;
-    [SerializeField] private float reloadDelay = 5f;
     [SerializeField] private string mainMenuSceneName = "Main Menu";
 
     [Header("UI Elements")]
@@ -32,6 +31,12 @@ public class GameOverManager : MonoBehaviour
     [Header("Score Settings")]
     [SerializeField] private TextMeshProUGUI scoreText;
     private float currentScore = 0f;
+
+    [Header("Win Transition Settings")]
+    [SerializeField] private Transform winSpriteTransform;
+    [SerializeField] private float transitionDuration = 3f;
+    [SerializeField] private float startY = 9f;
+    [SerializeField] private float endY = 3f;
 
     [Header("Debug/Monitor")]
     [SerializeField] private float currentTimer = 0f;
@@ -155,7 +160,36 @@ public class GameOverManager : MonoBehaviour
     private void Win()
     {
         isGameFinished = true;
+        StartCoroutine(WinTransitionRoutine());
+    }
+
+    private IEnumerator WinTransitionRoutine()
+    {
+        float elapsed = 0f;
         
+        if (winSpriteTransform != null)
+        {
+            Vector3 startPos = winSpriteTransform.position;
+            startPos.y = startY;
+            winSpriteTransform.position = startPos;
+
+            while (elapsed < transitionDuration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / transitionDuration;
+                
+                Vector3 currentPos = winSpriteTransform.position;
+                currentPos.y = Mathf.Lerp(startY, endY, t);
+                winSpriteTransform.position = currentPos;
+                
+                yield return null;
+            }
+        }
+        else
+        {
+            yield return new WaitForSeconds(transitionDuration);
+        }
+
         ShowGameOverUI("Kamu Menang!");
     }
 
@@ -164,7 +198,18 @@ public class GameOverManager : MonoBehaviour
         if (gameOverPanel != null) gameOverPanel.SetActive(true);
         if (resultText != null) resultText.text = message;
         
+        StopAllAnimations();
+        
         Debug.Log("Game Finished: " + message);
+    }
+
+    private void StopAllAnimations()
+    {
+        Animator[] allAnimators = Object.FindObjectsByType<Animator>(FindObjectsSortMode.None);
+        foreach (Animator anim in allAnimators)
+        {
+            anim.speed = 0;
+        }
     }
 
     public float GetRemainingTime()
