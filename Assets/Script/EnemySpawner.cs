@@ -4,8 +4,8 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [Header("Pool Settings")]
-    [SerializeField] private Enemy enemyPrefab;
-    private int poolSize = 4;
+    [SerializeField] private Enemy[] enemyPrefabs;
+    private int poolSizePerPrefab = 2;
     
     [Header("Spawn Settings")]
     [SerializeField] private Transform[] spawnPoints;
@@ -52,17 +52,21 @@ public class EnemySpawner : MonoBehaviour
     private void InitializePool()
     {
         enemyPool = new List<Enemy>();
-        for (int i = 0; i < poolSize; i++)
+        // Membalik urutan loop agar prefab diinstansiasi bergantian
+        for (int i = 0; i < poolSizePerPrefab; i++)
         {
-            Enemy enemy = Instantiate(enemyPrefab);
-            enemy.gameObject.SetActive(false);
-            enemyPool.Add(enemy);
+            foreach (Enemy prefab in enemyPrefabs)
+            {
+                Enemy enemy = Instantiate(prefab);
+                enemy.gameObject.SetActive(false);
+                enemyPool.Add(enemy);
+            }
         }
     }
 
     private void SpawnEnemy()
     {
-        Enemy enemy = GetEnemyFromPool();
+        Enemy enemy = GetRandomEnemyFromPool();
         if (enemy != null && spawnPoints.Length > 0)
         {
             Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
@@ -72,15 +76,21 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    private Enemy GetEnemyFromPool()
+    private Enemy GetRandomEnemyFromPool()
     {
-        // Perbaikan syntax error pada foreach
+        // Mencari musuh yang tidak aktif secara acak agar variasi lebih terasa
+        List<Enemy> availableEnemies = new List<Enemy>();
         foreach (Enemy enemy in enemyPool)
         {
             if (!enemy.gameObject.activeInHierarchy)
             {
-                return enemy;
+                availableEnemies.Add(enemy);
             }
+        }
+
+        if (availableEnemies.Count > 0)
+        {
+            return availableEnemies[Random.Range(0, availableEnemies.Count)];
         }
         return null;
     }

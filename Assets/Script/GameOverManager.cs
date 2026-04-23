@@ -13,14 +13,38 @@ public class GameOverManager : MonoBehaviour
 
     [Header("UI Elements")]
     [SerializeField] private GameObject gameOverPanel;
-    [SerializeField] private TextMeshProUGUI resultText; 
+    [SerializeField] private TextMeshProUGUI resultText;
+    
+    [Header("Start UI")]
+    [SerializeField] private GameObject startPanel;
+    [SerializeField] private TextMeshProUGUI countdownText;
+
+    [Header("Game Over Navigation")]
+    [SerializeField] private RectTransform mainMenuBtnRect;
+    [SerializeField] private RectTransform playAgainBtnRect;
+    [SerializeField] private Image mainMenuBtnImage;
+    [SerializeField] private Image playAgainBtnImage;
+    [SerializeField] private float selectedScale = 1.2f;
+    [SerializeField] private float normalScale = 1.0f;
+    [SerializeField] private Color pressedColor = new Color(0.5f, 0.5f, 0.5f, 1f);
+    [SerializeField] private float loadDelay = 0.5f;
+
+    [Header("Score Settings")]
+    [SerializeField] private TextMeshProUGUI scoreText;
+    private float currentScore = 0f;
 
     [Header("Debug/Monitor")]
     [SerializeField] private float currentTimer = 0f;
     [SerializeField] private bool isGameFinished = false;
+    [SerializeField] private bool isGameStarted = false;
+    private bool isTransitioning = false;
+
+    private int selectedGameOverIndex = 1; // 0: Main Menu, 1: Play Again
 
     public static GameOverManager Instance { get; private set; }
-    public bool IsGameFinished => isGameFinished; // Properti untuk diakses spawner
+    public bool IsGameFinished => isGameFinished || !isGameStarted;
+    public float SurvivalGoalTime => survivalGoalTime;
+    public float CurrentTimer => currentTimer;
 
     private void Awake()
     {
@@ -30,16 +54,94 @@ public class GameOverManager : MonoBehaviour
         if (gameOverPanel != null) gameOverPanel.SetActive(false);
     }
 
+    private void Start()
+    {
+        StartCoroutine(StartGameCountdown());
+    }
+
+    private IEnumerator StartGameCountdown()
+    {
+        isGameStarted = false;
+        if (startPanel != null) startPanel.SetActive(true);
+
+        if (countdownText != null)
+        {
+            countdownText.text = "3";
+            yield return new WaitForSeconds(1f);
+            countdownText.text = "2";
+            yield return new WaitForSeconds(1f);
+            countdownText.text = "1";
+            yield return new WaitForSeconds(1f);
+            countdownText.text = "START!";
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        if (startPanel != null) startPanel.SetActive(false);
+        isGameStarted = true;
+    }
+
     void Update()
     {
-        if (isGameFinished) return;
+        if (isTransitioning) return;
+
+        if (!isGameStarted || isGameFinished)
+        {
+            if (isGameFinished) HandleGameOverInput();
+            return;
+        }
 
         currentTimer += Time.deltaTime;
+        
+        // Update Score (1 poin tiap detik)
+        currentScore += Time.deltaTime;
+        if (scoreText != null)
+        {
+            scoreText.text = "" + Mathf.FloorToInt(currentScore).ToString();
+        }
 
         if (currentTimer >= survivalGoalTime)
         {
             Win();
         }
+    }
+
+    private void HandleGameOverInput()
+    {
+        if (UnityEngine.InputSystem.Keyboard.current == null) return;
+
+        // Navigasi A (Kiri) dan D (Kanan)
+        if (UnityEngine.InputSystem.Keyboard.current.aKey.wasPressedThisFrame)
+        {
+            selectedGameOverIndex = 0;
+        }
+        if (UnityEngine.InputSystem.Keyboard.current.dKey.wasPressedThisFrame)
+        {
+            selectedGameOverIndex = 1;
+        }
+
+        // Visual Feedback Scaling
+        if (mainMenuBtnRect != null)
+            mainMenuBtnRect.localScale = Vector3.Lerp(mainMenuBtnRect.localScale, Vector3.one * (selectedGameOverIndex == 0 ? selectedScale : normalScale), Time.deltaTime * 10f);
+        if (playAgainBtnRect != null)
+            playAgainBtnRect.localScale = Vector3.Lerp(playAgainBtnRect.localScale, Vector3.one * (selectedGameOverIndex == 1 ? selectedScale : normalScale), Time.deltaTime * 10f);
+
+        // Konfirmasi
+        if (UnityEngine.InputSystem.Keyboard.current.enterKey.wasPressedThisFrame)
+        {
+            if (selectedGameOverIndex == 0) StartCoroutine(LoadSceneRoutine(mainMenuSceneName, mainMenuBtnImage));
+            else StartCoroutine(LoadSceneRoutine(SceneManager.GetActiveScene().name, playAgainBtnImage));
+        }
+    }
+
+    private IEnumerator LoadSceneRoutine(string sceneName, Image buttonImage)
+    {
+        isTransitioning = true;
+
+        // Efek menggelap
+        if (buttonImage != null) buttonImage.color = pressedColor;
+
+        yield return new WaitForSeconds(loadDelay);
+        SceneManager.LoadScene(sceneName);
     }
 
     public void PlayerDied()
@@ -48,7 +150,6 @@ public class GameOverManager : MonoBehaviour
         isGameFinished = true;
 
         ShowGameOverUI("Kamu Kalah!");
-        StartCoroutine(LoadSceneRoutine(mainMenuSceneName));
     }
 
     private void Win()
@@ -56,7 +157,6 @@ public class GameOverManager : MonoBehaviour
         isGameFinished = true;
         
         ShowGameOverUI("Kamu Menang!");
-        StartCoroutine(LoadSceneRoutine(mainMenuSceneName));
     }
 
     private void ShowGameOverUI(string message)
@@ -65,12 +165,6 @@ public class GameOverManager : MonoBehaviour
         if (resultText != null) resultText.text = message;
         
         Debug.Log("Game Finished: " + message);
-    }
-
-    private IEnumerator LoadSceneRoutine(string sceneName)
-    {
-        yield return new WaitForSeconds(reloadDelay);
-        SceneManager.LoadScene(sceneName);
     }
 
     public float GetRemainingTime()

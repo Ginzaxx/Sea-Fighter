@@ -1887,9 +1887,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1619a5b9e1c4b8c4db35d1da84710172, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playButtonRect: {fileID: 0}
+  playButtonRect: {fileID: 1216436564}
   exitButtonRect: {fileID: 1940925686}
-  playButtonImage: {fileID: 0}
+  playButtonImage: {fileID: 1216436566}
   exitButtonImage: {fileID: 1940925688}
   selectedScale: 4.4
   normalScale: 4
