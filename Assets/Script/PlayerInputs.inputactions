@@ -82,6 +82,28 @@
                 },
                 {
                     "name": "",
+                    "id": "8e61c44f-d9c6-4078-a815-4dd33cf73b80",
+                    "path": "<Gamepad>/dpad",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c9b5fcee-5cb9-450a-99ae-6bf8b14b4376",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "0caa7510-bb0f-49c2-9d43-bea7cb32c916",
                     "path": "<Keyboard>/space",
                     "interactions": "",
@@ -95,6 +117,17 @@
                     "name": "",
                     "id": "b6e0cbbe-c03a-415a-b520-84a76e7870fa",
                     "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Confirm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5e6b48c5-ebc5-4b0b-ad2a-a8762d222ad0",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
