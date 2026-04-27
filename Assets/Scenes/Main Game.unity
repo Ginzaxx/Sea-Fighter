@@ -4193,7 +4193,7 @@ Transform:
   m_GameObject: {fileID: 782488083}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.41, y: 7.02, z: 0}
+  m_LocalPosition: {x: 2, y: 6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5124,7 +5124,7 @@ Transform:
   m_GameObject: {fileID: 895297401}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.41, y: 7.02, z: 0}
+  m_LocalPosition: {x: 0, y: 6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5487,8 +5487,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Rb2D: {fileID: 983244914}
-  Velocity: {x: 0, y: 0}
   playerHealth: {fileID: 983244918}
+  laneDistance: 2
+  moveSpeed: 15
 --- !u!61 &983244913
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5671,7 +5672,6 @@ MonoBehaviour:
   invincibilityDuration: 1
   flashInterval: 0.15
   spriteRenderer: {fileID: 983244916}
-  hpPanel: {fileID: 516597519}
   hpImages:
   - {fileID: 780411598}
   - {fileID: 1548228819}
@@ -10436,7 +10436,7 @@ Transform:
   m_GameObject: {fileID: 1971255177}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.41, y: 7.02, z: 0}
+  m_LocalPosition: {x: -2, y: 6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10492,13 +10492,13 @@ Transform:
   m_GameObject: {fileID: 2000142088}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.36113, y: -0.45993, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 895297402}
   - {fileID: 782488084}
   - {fileID: 1971255178}
-  - {fileID: 895297402}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2004321637
