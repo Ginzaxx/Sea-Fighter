@@ -4193,7 +4193,7 @@ Transform:
   m_GameObject: {fileID: 782488083}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 7.02, z: 0}
+  m_LocalPosition: {x: 2, y: 6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5124,7 +5124,7 @@ Transform:
   m_GameObject: {fileID: 895297401}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: 7.02, z: 0}
+  m_LocalPosition: {x: 0, y: 6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5488,8 +5488,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Rb2D: {fileID: 983244914}
   playerHealth: {fileID: 983244918}
-  BoatInput: 0
-  IsUsingBaseInputs: 0
+  laneDistance: 2
+  moveSpeed: 15
 --- !u!61 &983244913
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -8882,12 +8882,10 @@ MonoBehaviour:
   playAgainBtnRect: {fileID: 708440756}
   mainMenuBtnImage: {fileID: 629582075}
   playAgainBtnImage: {fileID: 708440758}
-  selectedGameOverIndex: 1
-  selectionInput: 0
   selectedScale: 1.2
   normalScale: 1
-  loadDelay: 0.5
   pressedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  loadDelay: 0.5
   scoreText: {fileID: 429750540}
   winSpriteTransform: {fileID: 72279693}
   transitionDuration: 3
@@ -10438,7 +10436,7 @@ Transform:
   m_GameObject: {fileID: 1971255177}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2, y: 7.02, z: 0}
+  m_LocalPosition: {x: -2, y: 6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10494,13 +10492,13 @@ Transform:
   m_GameObject: {fileID: 2000142088}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.45993, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 895297402}
   - {fileID: 782488084}
   - {fileID: 1971255178}
-  - {fileID: 895297402}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2004321637

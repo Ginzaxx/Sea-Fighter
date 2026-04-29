@@ -2,64 +2,69 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(BoxCollider2D))]
-[RequireComponent(typeof(PlayerHealth))]
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("References")]
     [SerializeField] private Rigidbody2D Rb2D;
-    [SerializeField] private Transform playerTF;
     [SerializeField] private PlayerHealth playerHealth;
 
-    [Header("Variables")]
-    [SerializeField] private float BoatInput;
-    [SerializeField] private bool IsUsingBaseInputs;
-
-    void OnEnable()
-    {
-        InputManager.Instance.OnMoveOn += OnMoveOn;
-        InputManager.Instance.OnConfirm += OnConfirm;
-    }
-
-    void OnDisable()
-    {
-        InputManager.Instance.OnMoveOn -= OnMoveOn;
-        InputManager.Instance.OnConfirm -= OnConfirm;
-    }
+    [Header("Movement Settings")]
+    [SerializeField] private float laneDistance = 2f;
+    [SerializeField] private float moveSpeed = 15f;
+    
+    private float targetX = 0f;
+    private Vector2 lastInput = Vector2.zero;
 
     void Start()
     {
         Rb2D = GetComponent<Rigidbody2D>();
         if (playerHealth == null) playerHealth = GetComponent<PlayerHealth>();
+        targetX = transform.position.x;
     }
 
     void Update()
     {
-        if (IsUsingBaseInputs) return;
-
-        BoatInput = InputManager.Instance.MoveInput.x;
-
-        if (GameOverManager.Instance.IsGameFinished) BoatInput = 0;
-        
-        Rb2D.linearVelocity = new Vector2(BoatInput, Rb2D.linearVelocityY);
-    }
-
-    private void OnMoveOn()
-    {
-        if (!IsUsingBaseInputs) return;
-
-        BoatInput = InputManager.Instance.MoveInput.x;
-
-        if (playerTF.transform.position.x <= 2 && playerTF.transform.position.x >= -2)
+        if (GameOverManager.Instance != null && GameOverManager.Instance.IsGameFinished) 
         {
-            playerTF.transform.position = new Vector3(BoatInput * 2, 0, 0);
+            Rb2D.linearVelocity = new Vector2(0, Rb2D.linearVelocityY);
+            return;
         }
+
+        HandleInput();
     }
 
-    private void OnConfirm()
+    private void FixedUpdate()
     {
-        Debug.Log("Using Base Inputs");
+        if (GameOverManager.Instance != null && GameOverManager.Instance.IsGameFinished) return;
+        
+        MovePlayer();
+    }
 
-        IsUsingBaseInputs = !IsUsingBaseInputs;
+    private void HandleInput()
+    {
+        if (InputManager.Instance == null) return;
+
+        Vector2 currentInput = InputManager.Instance.MoveInput;
+
+        // Detect single press for Left
+        if (currentInput.x < -0.5f && lastInput.x >= -0.5f)
+        {
+            targetX = Mathf.Clamp(targetX - laneDistance, -laneDistance, laneDistance);
+        }
+        // Detect single press for Right
+        else if (currentInput.x > 0.5f && lastInput.x <= 0.5f)
+        {
+            targetX = Mathf.Clamp(targetX + laneDistance, -laneDistance, laneDistance);
+        }
+
+        lastInput = currentInput;
+    }
+
+    private void MovePlayer()
+    {
+        float currentX = transform.position.x;
+        float nextX = Mathf.Lerp(currentX, targetX, Time.fixedDeltaTime * moveSpeed);
+        
+        Rb2D.MovePosition(new Vector2(nextX, transform.position.y));
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -72,7 +77,6 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                // Fallback jika komponen health tidak ditemukan
                 GameOverManager.Instance.PlayerDied();
             }
         }
