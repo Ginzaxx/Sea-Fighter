@@ -59,6 +59,16 @@ public class PlayerMovement : MonoBehaviour
         lastInput = currentInput;
     }
 
+    public void MoveLeft()
+    {
+        targetX = Mathf.Clamp(targetX - laneDistance, -laneDistance, laneDistance);
+    }
+
+    public void MoveRight()
+    {
+        targetX = Mathf.Clamp(targetX + laneDistance, -laneDistance, laneDistance);
+    }
+
     private void MovePlayer()
     {
         float currentX = transform.position.x;
