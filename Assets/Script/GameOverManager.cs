@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro; // Diperlukan untuk TextMeshPro
 using System.Collections;
+using UnityEngine.Serialization;
 
 public class GameOverManager : MonoBehaviour
 {
@@ -20,13 +21,30 @@ public class GameOverManager : MonoBehaviour
 
     [Header("Game Over Navigation")]
     [SerializeField] private RectTransform mainMenuBtnRect;
-    [SerializeField] private RectTransform playAgainBtnRect;
+    [FormerlySerializedAs("playAgainBtnRect")]
+    [SerializeField] private RectTransform continueBtnRect;
     [SerializeField] private Image mainMenuBtnImage;
-    [SerializeField] private Image playAgainBtnImage;
+    [FormerlySerializedAs("playAgainBtnImage")]
+    [SerializeField] private Image continueBtnImage;
+    [SerializeField] private TextMeshProUGUI continueBtnText;
     [SerializeField] private float selectedScale = 1.2f;
     [SerializeField] private float normalScale = 1.0f;
     [SerializeField] private Color pressedColor = new Color(0.5f, 0.5f, 0.5f, 1f);
     [SerializeField] private float loadDelay = 0.5f;
+
+    [Header("Next Level Settings")]
+    [SerializeField] private string nextSceneName;
+#if UNITY_EDITOR
+    [SerializeField] private UnityEditor.SceneAsset nextSceneAsset;
+
+    private void OnValidate()
+    {
+        if (nextSceneAsset != null)
+        {
+            nextSceneName = nextSceneAsset.name;
+        }
+    }
+#endif
 
     [Header("Score Settings")]
     [SerializeField] private TextMeshProUGUI scoreText;
@@ -44,7 +62,7 @@ public class GameOverManager : MonoBehaviour
     [SerializeField] private bool isGameStarted = false;
     private bool isTransitioning = false;
 
-    private int selectedGameOverIndex = 1; // 0: Main Menu, 1: Play Again
+    private int selectedGameOverIndex = 1; // 0: Main Menu, 1: Continue
 
     public static GameOverManager Instance { get; private set; }
     public bool IsGameFinished => isGameFinished;
@@ -58,6 +76,7 @@ public class GameOverManager : MonoBehaviour
         else Destroy(gameObject);
 
         if (gameOverPanel != null) gameOverPanel.SetActive(false);
+        if (continueBtnText != null) continueBtnText.text = "Continue";
     }
 
     private void Start()
@@ -128,19 +147,25 @@ public class GameOverManager : MonoBehaviour
         // Visual Feedback Scaling
         if (mainMenuBtnRect != null)
             mainMenuBtnRect.localScale = Vector3.Lerp(mainMenuBtnRect.localScale, Vector3.one * (selectedGameOverIndex == 0 ? selectedScale : normalScale), Time.deltaTime * 10f);
-        if (playAgainBtnRect != null)
-            playAgainBtnRect.localScale = Vector3.Lerp(playAgainBtnRect.localScale, Vector3.one * (selectedGameOverIndex == 1 ? selectedScale : normalScale), Time.deltaTime * 10f);
+        if (continueBtnRect != null)
+            continueBtnRect.localScale = Vector3.Lerp(continueBtnRect.localScale, Vector3.one * (selectedGameOverIndex == 1 ? selectedScale : normalScale), Time.deltaTime * 10f);
 
         // Konfirmasi
         if (UnityEngine.InputSystem.Keyboard.current.enterKey.wasPressedThisFrame)
         {
             if (selectedGameOverIndex == 0) StartCoroutine(LoadSceneRoutine(mainMenuSceneName, mainMenuBtnImage));
-            else StartCoroutine(LoadSceneRoutine(SceneManager.GetActiveScene().name, playAgainBtnImage));
+            else StartCoroutine(LoadSceneRoutine(nextSceneName, continueBtnImage));
         }
     }
 
     private IEnumerator LoadSceneRoutine(string sceneName, Image buttonImage)
     {
+        if (string.IsNullOrEmpty(sceneName))
+        {
+            Debug.LogError("Scene name is empty! Please assign a next scene in the inspector.");
+            yield break;
+        }
+
         isTransitioning = true;
 
         // Efek menggelap

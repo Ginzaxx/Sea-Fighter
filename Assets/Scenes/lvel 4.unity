@@ -9003,13 +9003,16 @@ MonoBehaviour:
   startPanel: {fileID: 106123257}
   countdownText: {fileID: 709564186}
   mainMenuBtnRect: {fileID: 629582073}
-  playAgainBtnRect: {fileID: 708440756}
+  continueBtnRect: {fileID: 708440756}
   mainMenuBtnImage: {fileID: 629582075}
-  playAgainBtnImage: {fileID: 708440758}
+  continueBtnImage: {fileID: 708440758}
+  continueBtnText: {fileID: 0}
   selectedScale: 1.2
   normalScale: 1
   pressedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   loadDelay: 0.5
+  nextSceneName: Main Game
+  nextSceneAsset: {fileID: 102900000, guid: 3864adc408907e74f8299b8df514a97e, type: 3}
   scoreText: {fileID: 429750540}
   winSpriteTransform: {fileID: 72279693}
   transitionDuration: 3
@@ -10604,8 +10607,8 @@ MonoBehaviour:
   - {fileID: 895297402}
   initialSpawnInterval: 2
   minSpawnInterval: 0.75
-  intervalDecreasePerSecond: 0.05
-  enemySpeed: 5
+  intervalDecreasePerSecond: 0.1
+  enemySpeed: 15
   currentSpawnInterval: 0
 --- !u!4 &2000142090
 Transform:
