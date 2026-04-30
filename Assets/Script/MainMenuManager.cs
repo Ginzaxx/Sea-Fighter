@@ -28,13 +28,13 @@ public class MainMenuManager : MonoBehaviour
 
     void OnEnable()
     {
-        InputManager.Instance.OnMoveOn += OnMoveOn;
+        InputManager.Instance.OnMove += OnMove;
         InputManager.Instance.OnConfirm += OnConfirm;
     }
 
     void OnDisable()
     {
-        InputManager.Instance.OnMoveOn -= OnMoveOn;
+        InputManager.Instance.OnMove -= OnMove;
         InputManager.Instance.OnConfirm -= OnConfirm;
     }
 
@@ -51,7 +51,7 @@ public class MainMenuManager : MonoBehaviour
         else StartCoroutine(ExitGameRoutine());
     }
 
-    private void OnMoveOn()
+    private void OnMove()
     {
         selectionInput = InputManager.Instance.MoveInput.y;
 

@@ -62,13 +62,13 @@ public class GameOverManager : MonoBehaviour
 
     void OnEnable()
     {
-        InputManager.Instance.OnMoveOn += OnMoveOn;
+        InputManager.Instance.OnMove += OnMove;
         InputManager.Instance.OnConfirm += OnConfirm;
     }
 
     void OnDisable()
     {
-        InputManager.Instance.OnMoveOn -= OnMoveOn;
+        InputManager.Instance.OnMove -= OnMove;
         InputManager.Instance.OnConfirm -= OnConfirm;
     }
 
@@ -123,7 +123,7 @@ public class GameOverManager : MonoBehaviour
         }
     }
 
-    private void OnMoveOn()
+    private void OnMove()
     {
         if (!isGameFinished) return;
 
