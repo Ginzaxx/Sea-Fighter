@@ -2,6 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(BoxCollider2D))]
+[RequireComponent(typeof(PlayerHealth))]
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D Rb2D;
@@ -14,10 +15,25 @@ public class PlayerMovement : MonoBehaviour
     private float targetX = 0f;
     private Vector2 lastInput = Vector2.zero;
 
+    private void OnEnable()
+    {
+        InputManager.Instance.OnMove += OnMove;
+        InputManager.Instance.OnConfirm += OnConfirm;
+    }
+
+    private void OnDisable()
+    {
+        InputManager.Instance.OnMove -= OnMove;
+        InputManager.Instance.OnConfirm -= OnConfirm;
+    }
+
     void Start()
     {
-        Rb2D = GetComponent<Rigidbody2D>();
-        if (playerHealth == null) playerHealth = GetComponent<PlayerHealth>();
+        if (Rb2D == null)
+            Rb2D = GetComponent<Rigidbody2D>();
+        if (playerHealth == null)
+            playerHealth = GetComponent<PlayerHealth>();
+
         targetX = transform.position.x;
     }
 
@@ -37,6 +53,18 @@ public class PlayerMovement : MonoBehaviour
         if (GameOverManager.Instance != null && GameOverManager.Instance.IsGameFinished) return;
         
         MovePlayer();
+    }
+
+    private void OnMove()
+    {
+        float targetNextX = InputManager.Instance.MoveInput.x;
+
+        targetX = Mathf.Clamp(targetX - laneDistance, -laneDistance, laneDistance);
+    }
+
+    private void OnConfirm()
+    {
+        
     }
 
     private void HandleInput()
@@ -71,6 +99,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void MovePlayer()
     {
+        if (!InputManager.Instance.UseFixedInputs) return;
+
         float currentX = transform.position.x;
         float nextX = Mathf.Lerp(currentX, targetX, Time.fixedDeltaTime * moveSpeed);
         

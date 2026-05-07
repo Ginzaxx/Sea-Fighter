@@ -1,21 +1,21 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
     public static InputManager Instance { get; private set; }
     public Vector2 MoveInput { get; private set; }
-    private PlayerInputs PIA;
-    [SerializeField] private bool UseFixedInputs;
-    [SerializeField] private bool UseNodeMCUInputs;
+    public PlayerInputs PIA = new();
+    public bool UseFixedInputs;
+    public bool UseNodeMCUInputs;
 
     [Header("NodeMCU Connections")]
     public UDPSend sender = new();
     public int Remoteport = 25666;
 
-    public event Action OnMoveOn;
-    public event Action OnMoveOff;
-    public event Action OnConfirm;
+    public event Action OnMove, OnConfirm;
+    private Action<InputAction.CallbackContext> onMove, offMove, onConfirm;
 
     private void Awake()
     {
@@ -25,28 +25,22 @@ public class InputManager : MonoBehaviour
             return;
         }
         Instance = this;
-
-        PIA = new PlayerInputs();
-        sender = new UDPSend();
     }
+
     private void OnEnable()
     {
-        PIA.Player.Move.performed       += ctx => MoveInput = ctx.ReadValue<Vector2>();
-        PIA.Player.Move.canceled        += ctx => MoveInput = Vector2.zero;
-        PIA.Player.Move.performed       += ctx => OnMoveOn?.Invoke();
-        PIA.Player.Move.canceled        += ctx => OnMoveOff?.Invoke();
-        PIA.Player.Confirm.performed    += ctx => OnConfirm?.Invoke();
+        PIA.Player.Move.performed       += onMove       = ctx => { MoveInput = ctx.ReadValue<Vector2>(); OnMove?.Invoke(); };
+        PIA.Player.Move.canceled        += offMove      = ctx => MoveInput = Vector2.zero;
+        PIA.Player.Confirm.performed    += onConfirm    = ctx => OnConfirm?.Invoke();
 
         PIA.Player.Enable();
     }
 
     private void OnDisable()
     {
-        PIA.Player.Move.performed       -= ctx => MoveInput = ctx.ReadValue<Vector2>();
-        PIA.Player.Move.canceled        -= ctx => MoveInput = Vector2.zero;
-        PIA.Player.Move.performed       -= ctx => OnMoveOn?.Invoke();
-        PIA.Player.Move.canceled        -= ctx => OnMoveOff?.Invoke();
-        PIA.Player.Confirm.performed    -= ctx => OnConfirm?.Invoke();
+        PIA.Player.Move.performed       -= onMove;
+        PIA.Player.Move.canceled        -= offMove;
+        PIA.Player.Confirm.performed    -= onConfirm;
 
         PIA.Player.Disable();
         PIA.Dispose();
@@ -68,6 +62,8 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
+        if (!UseNodeMCUInputs) return;
+
         if (sender.newdatahereboys)
         {
             byte[] raw = sender.getLatestUDPBytes();
