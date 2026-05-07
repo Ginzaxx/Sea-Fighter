@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class UDPManager : MonoBehaviour
@@ -25,20 +26,22 @@ public class UDPManager : MonoBehaviour
 
             if (raw != null && raw.Length == 4)
             {
-                int value = (raw[0] << 24) | (raw[1] << 16) | (raw[2] << 8) | raw[3];
-                HandleNodeInput(value);
+                float x = BitConverter.ToSingle(raw, 0);
+                float y = BitConverter.ToSingle(raw, 4);
+                float z = BitConverter.ToSingle(raw, 8);
+                HandleNodeInput(x, y, z);
             }
         }
     }
 
-    private void HandleNodeInput(int value)
+    private void HandleNodeInput(float x, float y, float z)
     {
         if (playerMovement == null) return;
 
-        Debug.Log($"Value : " + value);
+        Debug.Log($"X : " + x);
 
-        if (value < 400)       playerMovement.MoveLeft();
-        else if (value > 600)  playerMovement.MoveRight();
+        if (x < -2.0f)      playerMovement.MoveLeft();
+        else if (x > 2.0f)  playerMovement.MoveRight();
     }
 
     public void OnDisable()       { sender.ClosePorts(); }
