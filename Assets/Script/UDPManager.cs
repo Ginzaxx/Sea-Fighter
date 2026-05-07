@@ -38,10 +38,10 @@ public class UDPManager : MonoBehaviour
     {
         if (playerMovement == null) return;
 
-        Debug.Log($"X : " + x);
+        Debug.Log($"Y Value : " + y);
 
-        if (x < -2.0f)      playerMovement.MoveLeft();
-        else if (x > 2.0f)  playerMovement.MoveRight();
+        if (y > 2.0f)      playerMovement.MoveLeft();
+        else if (y < -2.0f)  playerMovement.MoveRight();
     }
 
     public void OnDisable()       { sender.ClosePorts(); }

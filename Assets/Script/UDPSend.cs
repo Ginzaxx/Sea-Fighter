@@ -151,7 +151,7 @@ public class UDPSend
 
     public void ClosePorts()
     {
-        Debug.Log("closing receiving UDP on port: " + port);
+        Debug.Log("Closing receiving UDP on Port: " + port);
 
         if (receiveThread != null)
             receiveThread.Abort();
