@@ -10,7 +10,7 @@ const char* password = "IceBender";
 IPAddress unityIP(10, 87, 8, 231);
 unsigned int unityPort = 25666;
 
-IPAddress ip(10, 87, 8, 231);
+IPAddress ip(10, 87, 8, 232);
 IPAddress gateway(10, 87, 8, 187);
 IPAddress subnet(255, 255, 255, 0);
 
