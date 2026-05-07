@@ -64,5 +64,5 @@ void loop()
   Udp.write(data, 12);
   Udp.endPacket();
 
-  delay(500);
+  delay(200);
 }

@@ -4,14 +4,12 @@ using UnityEngine;
 public class UDPManager : MonoBehaviour
 {
     public int Remoteport = 25666;
-    public UDPSend sender = new UDPSend();
-    public string datafromnode;
+    public UDPSend sender = new();
 
-    [SerializeField] private PlayerMovement playerMovement; // drag in Inspector
+    [SerializeField] private PlayerMovement playerMovement;
 
     void Start()
     {
-        // Replace with your PC's local IP and NodeMCU's IP if needed
         sender.init("10.87.8.231", Remoteport, 25666);
         sender.sendString("Hello from Unity");
         Application.targetFrameRate = 60;
