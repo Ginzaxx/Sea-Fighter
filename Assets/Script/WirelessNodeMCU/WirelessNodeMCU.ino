@@ -35,7 +35,13 @@ void setup()
   }
   Serial.println("Connected to IP: " + WiFi.localIP().toString());
 
+  if (!accel.begin())
+  {
+    Serial.println("No ADXL345 detected. Check wiring!");
+    while (1);
+  }
   accel.setRange(ADXL345_RANGE_2_G);
+
   Udp.begin(unityPort);
 }
 

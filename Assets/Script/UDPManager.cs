@@ -24,7 +24,7 @@ public class UDPManager : MonoBehaviour
             byte[] raw = sender.getLatestUDPBytes();
             sender.newdatahereboys = false;
 
-            if (raw != null && raw.Length == 4)
+            if (raw != null && raw.Length == 12)
             {
                 float x = BitConverter.ToSingle(raw, 0);
                 float y = BitConverter.ToSingle(raw, 4);
