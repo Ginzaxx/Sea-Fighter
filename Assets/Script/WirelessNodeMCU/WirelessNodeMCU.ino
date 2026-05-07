@@ -1,5 +1,8 @@
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_ADXL345_U.h>
 
 const char* ssid = "LogicLover";
 const char* password = "IceBender";
@@ -12,6 +15,7 @@ IPAddress gateway(10, 87, 8, 187);
 IPAddress subnet(255, 255, 255, 0);
 
 WiFiUDP Udp;
+Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified(12345);
 
 void setup()
 {
@@ -29,28 +33,29 @@ void setup()
     delay(500);
     Serial.print(".");
   }
+  Serial.println("Connected to IP: " + WiFi.localIP().toString());
 
-  Serial.println("Connected. IP: " + WiFi.localIP().toString());
-
+  accel.setRange(ADXL345_RANGE_2_G);
   Udp.begin(unityPort);
 }
 
 void loop()
 {
-  int joystickX = analogRead(A0);
+  sensors_event_t event;
+  accel.getEvent(&event);
 
-  int direction = 0;
-  if (joystickX < 400)      direction = -1; // LEFT
-  else if (joystickX > 600) direction =  1; // RIGHT
+  float values[3] =
+  {
+    event.acceleration.x,
+    event.acceleration.y,
+    event.acceleration.z
+  };
 
-  byte data[4];
-  data[0] = (direction >> 24) & 0xFF;
-  data[1] = (direction >> 16) & 0xFF;
-  data[2] = (direction >> 8)  & 0xFF;
-  data[3] =  direction        & 0xFF;
+  byte data[12];
+  memcpy(data, values, 12);
 
   Udp.beginPacket(unityIP, unityPort);
-  Udp.write(data, 4);
+  Udp.write(data, 12);
   Udp.endPacket();
 
   delay(1000);
