@@ -56,9 +56,7 @@ public class UDPSend
             Debug.Log("Sending to " + IP + ": " + remotePort + " from Source Port: " + sourcePort);
         }
 
-        receiveThread = new Thread(
-            new ThreadStart(ReceiveData));
-        receiveThread.IsBackground = true;
+        receiveThread = new Thread(new ThreadStart(ReceiveData)) { IsBackground = true };
         receiveThread.Start();
 
     }
@@ -69,11 +67,13 @@ public class UDPSend
         {
             try
             {
-                IPEndPoint anyIP = new IPEndPoint(IPAddress.Any, 0);
+                IPEndPoint anyIP = new(IPAddress.Any, 0);
                 byte[] data = client.Receive(ref anyIP);
 
-                lastReceivedBytes = data; // store raw bytes
+                lastReceivedBytes = data;
                 newdatahereboys = true;
+
+                Debug.Log("New Data = " + newdatahereboys);
             }
             catch (Exception err)
             {
@@ -83,7 +83,7 @@ public class UDPSend
     }
 
     // sendData in different ways. Can be extended accordingly
-    public void sendString(string message)
+    public void SendString(string message)
     {
         try
         {
@@ -97,7 +97,7 @@ public class UDPSend
         }
     }
 
-    public void sendInt32(Int32 myInt)
+    public void SendInt32(int myInt)
     {
         try
         {
@@ -110,7 +110,7 @@ public class UDPSend
         }
     }
 
-    public void sendInt32Array(Int32[] myInts)
+    public void SendInt32Array(int[] myInts)
     {
         try
         {
@@ -124,7 +124,7 @@ public class UDPSend
         }
     }
 
-    public void sendInt16Array(Int16[] myInts)
+    public void SendInt16Array(short[] myInts)
     {
         try
         {
@@ -138,13 +138,13 @@ public class UDPSend
         }
     }
 
-    public string getLatestUDPPacket()
+    public string GetLatestUDPPacket()
     {
         allReceivedUDPPackets = "";
         return lastReceivedUDPPacket;
     }
 
-    public byte[] getLatestUDPBytes()
+    public byte[] GetLatestUDPBytes()
     {
         return lastReceivedBytes;
     }
@@ -153,8 +153,7 @@ public class UDPSend
     {
         Debug.Log("Closing receiving UDP on Port: " + port);
 
-        if (receiveThread != null)
-            receiveThread.Abort();
+        receiveThread?.Abort();
 
         client.Close();
     }

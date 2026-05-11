@@ -11,24 +11,32 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement Settings")]
     [SerializeField] private float laneDistance = 2f;
     [SerializeField] private float moveSpeed = 15f;
+    [SerializeField] private float moveInput;
     
     private float targetX = 0f;
     private Vector2 lastInput = Vector2.zero;
 
-    private void OnEnable()
+    private void OnSub()
     {
         InputManager.Instance.OnMove += OnMove;
         InputManager.Instance.OnConfirm += OnConfirm;
     }
 
-    private void OnDisable()
+    private void OnUnsub()
     {
         InputManager.Instance.OnMove -= OnMove;
         InputManager.Instance.OnConfirm -= OnConfirm;
     }
 
+    void OnDestroy()
+    {
+        OnUnsub();
+    }
+
     void Start()
     {
+        OnSub();
+
         if (Rb2D == null)
             Rb2D = GetComponent<Rigidbody2D>();
         if (playerHealth == null)
@@ -44,62 +52,38 @@ public class PlayerMovement : MonoBehaviour
             Rb2D.linearVelocity = new Vector2(0, Rb2D.linearVelocityY);
             return;
         }
-
-        HandleInput();
     }
 
     private void FixedUpdate()
     {
         if (GameOverManager.Instance != null && GameOverManager.Instance.IsGameFinished) return;
-        
+
         MovePlayer();
     }
 
     private void OnMove()
     {
-        float targetNextX = InputManager.Instance.MoveInput.x;
+        moveInput = InputManager.Instance.MoveInput.x;
 
-        targetX = Mathf.Clamp(targetX - laneDistance, -laneDistance, laneDistance);
+        if (!InputManager.Instance.UseFixedInputs) return;
+
+        targetX = Mathf.Clamp(targetX + (laneDistance * moveInput), -laneDistance, laneDistance);
     }
 
     private void OnConfirm()
     {
-        
-    }
-
-    private void HandleInput()
-    {
-        if (InputManager.Instance == null) return;
-
-        Vector2 currentInput = InputManager.Instance.MoveInput;
-
-        // Detect single press for Left
-        if (currentInput.x < -0.5f && lastInput.x >= -0.5f)
-        {
-            targetX = Mathf.Clamp(targetX - laneDistance, -laneDistance, laneDistance);
-        }
-        // Detect single press for Right
-        else if (currentInput.x > 0.5f && lastInput.x <= 0.5f)
-        {
-            targetX = Mathf.Clamp(targetX + laneDistance, -laneDistance, laneDistance);
-        }
-
-        lastInput = currentInput;
-    }
-
-    public void MoveLeft()
-    {
-        targetX = Mathf.Clamp(targetX - laneDistance, -laneDistance, laneDistance);
-    }
-
-    public void MoveRight()
-    {
-        targetX = Mathf.Clamp(targetX + laneDistance, -laneDistance, laneDistance);
+        InputManager.Instance.UseFixedInputs = !InputManager.Instance.UseFixedInputs;
     }
 
     private void MovePlayer()
     {
-        if (!InputManager.Instance.UseFixedInputs) return;
+        moveInput = InputManager.Instance.MoveInput.x;
+
+        if (!InputManager.Instance.UseFixedInputs)
+        {
+            Rb2D.linearVelocity = new Vector2(moveInput, Rb2D.linearVelocityY);
+            return;
+        }
 
         float currentX = transform.position.x;
         float nextX = Mathf.Lerp(currentX, targetX, Time.fixedDeltaTime * moveSpeed);

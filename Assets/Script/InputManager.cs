@@ -5,10 +5,12 @@ using UnityEngine.InputSystem;
 public class InputManager : MonoBehaviour
 {
     public static InputManager Instance { get; private set; }
-    public Vector2 MoveInput { get; private set; }
-    public PlayerInputs PIA = new();
-    public bool UseFixedInputs;
-    public bool UseNodeMCUInputs;
+    public Vector2 MoveInput => NodeInput != Vector2.zero ? NodeInput : KeyInput;
+    public Vector2 NodeInput;
+    public Vector2 KeyInput;
+    public PlayerInputs PIA;
+    public bool UseFixedInputs = true;
+    public bool NewData;
 
     [Header("NodeMCU Connections")]
     public UDPSend sender = new();
@@ -25,12 +27,14 @@ public class InputManager : MonoBehaviour
             return;
         }
         Instance = this;
+
+        PIA = new();
     }
 
     private void OnEnable()
     {
-        PIA.Player.Move.performed       += onMove       = ctx => { MoveInput = ctx.ReadValue<Vector2>(); OnMove?.Invoke(); };
-        PIA.Player.Move.canceled        += offMove      = ctx => MoveInput = Vector2.zero;
+        PIA.Player.Move.performed       += onMove       = ctx => { KeyInput = ctx.ReadValue<Vector2>(); OnMove?.Invoke(); };
+        PIA.Player.Move.canceled        += offMove      = ctx => KeyInput = Vector2.zero;
         PIA.Player.Confirm.performed    += onConfirm    = ctx => OnConfirm?.Invoke();
 
         PIA.Player.Enable();
@@ -56,17 +60,15 @@ public class InputManager : MonoBehaviour
     void Start()
     {
         sender.init("10.87.8.231", Remoteport, 25666);
-        sender.sendString("Hello from Unity");
+        sender.SendString("Hello from Unity");
         Application.targetFrameRate = 60;
     }
 
     private void Update()
     {
-        if (!UseNodeMCUInputs) return;
-
-        if (sender.newdatahereboys)
+        if (NewData = sender.newdatahereboys)
         {
-            byte[] raw = sender.getLatestUDPBytes();
+            byte[] raw = sender.GetLatestUDPBytes();
             sender.newdatahereboys = false;
 
             if (raw != null && raw.Length == 12)
@@ -78,21 +80,26 @@ public class InputManager : MonoBehaviour
             }
         }
     }
+
     private void HandleNodeInput(float x, float y, float z)
     {
-        Debug.Log($"Move Input Value : " + MoveInput);
-
         if (UseFixedInputs)
         {
-            if (y > 2.0f)       MoveInput = new Vector2(-1, MoveInput.y);
-            else if (y < -2.0f) MoveInput = new Vector2(1, MoveInput.y);
+            float newX = 0, newY = 0;
 
-            if (x > 2.0f)       MoveInput = new Vector2(MoveInput.x, -1);
-            else if (x < -2.0f) MoveInput = new Vector2(MoveInput.x, 1);
+            if (y > 2.0f)       newX = -1;
+            else if (y < -2.0f) newX = 1;
+
+            if (x > 2.0f)       newY = -1;
+            else if (x < -2.0f) newY = 1;
+
+            NodeInput = new Vector2(newX, newY);
         }
         else
         {
-            MoveInput = new Vector2(y / -2, x / -2);
+            NodeInput = new Vector2(y/-2, x/-2);
         }
+
+        Debug.Log($"Move Input Value : " + NodeInput);
     }
 }

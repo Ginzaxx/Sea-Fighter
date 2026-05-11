@@ -5490,6 +5490,7 @@ MonoBehaviour:
   playerHealth: {fileID: 983244918}
   laneDistance: 2
   moveSpeed: 15
+  moveInput: 0
 --- !u!61 &983244913
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6525,7 +6526,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 216b14cc1b56d5d4e81bf0b933c52a1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UseFixedInputs: 0
+  UseFixedInputs: 1
   UseNodeMCUInputs: 0
   Remoteport: 25666
 --- !u!4 &1138479793

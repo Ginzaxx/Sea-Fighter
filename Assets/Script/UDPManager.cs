@@ -11,7 +11,7 @@ public class UDPManager : MonoBehaviour
     void Start()
     {
         sender.init("10.87.8.231", Remoteport, 25666);
-        sender.sendString("Hello from Unity");
+        sender.SendString("Hello from Unity");
         Application.targetFrameRate = 60;
     }
 
@@ -19,7 +19,7 @@ public class UDPManager : MonoBehaviour
     {
         if (sender.newdatahereboys)
         {
-            byte[] raw = sender.getLatestUDPBytes();
+            byte[] raw = sender.GetLatestUDPBytes();
             sender.newdatahereboys = false;
 
             if (raw != null && raw.Length == 12)
@@ -38,8 +38,8 @@ public class UDPManager : MonoBehaviour
 
         Debug.Log($"Y Value : " + y);
 
-        if (y > 2.0f)      playerMovement.MoveLeft();
-        else if (y < -2.0f)  playerMovement.MoveRight();
+        // if (y > 2.0f)      playerMovement.MoveLeft();
+        // else if (y < -2.0f)  playerMovement.MoveRight();
     }
 
     public void OnDisable()       { sender.ClosePorts(); }
