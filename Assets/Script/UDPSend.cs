@@ -17,43 +17,39 @@ using System.Threading;
 public class UDPSend
 {
     public string IP { get; private set; }
-    public int sourcePort { get; private set; } // Sometimes we need to define the source port, since some devices only accept messages coming from a predefined sourceport.
-    public int remotePort { get; private set; }
+    public int SourcePort { get; private set; }
+    public int RemotePort { get; private set; }
 
     IPEndPoint remoteEndPoint;
-
     Thread receiveThread;
-
-    // udpclient object
     UdpClient client;
 
-    // public
-    // public string IP = "127.0.0.1"; default local
-    public int port = 25666; // define > init
+    // === Connection ===
+    // public string IP = "127.0.0.1";
+    public int port = 25666;
 
-    // Information
+    // === Information ===
     public string lastReceivedUDPPacket = "";
-    public string allReceivedUDPPackets = ""; // Clean up this from time to time!
+    public string allReceivedUDPPackets = "";
     public byte[] lastReceivedBytes = null;
-
     public bool newdatahereboys = false;
 
-    public void init(string IPAdress, int RemotePort, int SourcePort = -1) // If sourceport is not set, its being chosen randomly by the system
+    public void Init(string IPAdress, int remotePort, int sourcePort = -1)
     {
         IP = IPAdress;
-        sourcePort = SourcePort;
-        remotePort = RemotePort;
+        SourcePort = sourcePort;
+        RemotePort = remotePort;
 
-        remoteEndPoint = new IPEndPoint(IPAddress.Parse(IP), remotePort);
-        if (sourcePort <= -1)
+        remoteEndPoint = new IPEndPoint(IPAddress.Parse(IP), RemotePort);
+        if (SourcePort <= -1)
         {
             client = new UdpClient();
-            Debug.Log("Sending to " + IP + ": " + remotePort);
+            Debug.Log("Sending to " + IP + ": " + RemotePort);
         }
         else
         {
-            client = new UdpClient(sourcePort);
-            Debug.Log("Sending to " + IP + ": " + remotePort + " from Source Port: " + sourcePort);
+            client = new UdpClient(SourcePort);
+            Debug.Log("Sending to " + IP + ": " + RemotePort + " from Source Port: " + SourcePort);
         }
 
         receiveThread = new Thread(new ThreadStart(ReceiveData)) { IsBackground = true };
@@ -82,7 +78,6 @@ public class UDPSend
         }
     }
 
-    // sendData in different ways. Can be extended accordingly
     public void SendString(string message)
     {
         try

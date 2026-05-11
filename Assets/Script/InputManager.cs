@@ -59,7 +59,7 @@ public class InputManager : MonoBehaviour
 
     void Start()
     {
-        sender.init("10.87.8.231", Remoteport, 25666);
+        sender.Init("10.87.8.231", Remoteport, 25666);
         sender.SendString("Hello from Unity");
         Application.targetFrameRate = 60;
     }
