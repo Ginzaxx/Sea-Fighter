@@ -5,16 +5,20 @@ using UnityEngine.InputSystem;
 public class InputManager : MonoBehaviour
 {
     public static InputManager Instance { get; private set; }
-    public Vector2 MoveInput => NodeInput != Vector2.zero ? NodeInput : KeyInput;
-    public Vector2 NodeInput;
-    public Vector2 KeyInput;
+    public Vector2 MoveInput;
+    public Vector3 NodeInput;
     public PlayerInputs PIA;
     public bool UseFixedInputs = true;
-    public bool NewData;
 
     [Header("NodeMCU Connections")]
-    public UDPSend sender = new();
-    public int Remoteport = 25666;
+    [SerializeField] private bool NewData;
+    [SerializeField] private int IPIndex = 2;
+    private readonly UDPSend sender = new();
+    private readonly string IPAddress1 = "10.87.8.231";
+    private readonly string IPAddress2 = "10.11.183.231";
+    [SerializeField] private string IPAddress = "";
+    [SerializeField] private int RemotePort = 25666;
+    [SerializeField] private int SourcePort = 25666;
 
     public event Action OnMove, OnConfirm;
     private Action<InputAction.CallbackContext> onMove, offMove, onConfirm;
@@ -27,14 +31,15 @@ public class InputManager : MonoBehaviour
             return;
         }
         Instance = this;
+        DontDestroyOnLoad(this);
 
         PIA = new();
     }
 
     private void OnEnable()
     {
-        PIA.Player.Move.performed       += onMove       = ctx => { KeyInput = ctx.ReadValue<Vector2>(); OnMove?.Invoke(); };
-        PIA.Player.Move.canceled        += offMove      = ctx => KeyInput = Vector2.zero;
+        PIA.Player.Move.performed       += onMove       = ctx => { MoveInput = ctx.ReadValue<Vector2>(); OnMove?.Invoke(); };
+        PIA.Player.Move.canceled        += offMove      = ctx => MoveInput = Vector2.zero;
         PIA.Player.Confirm.performed    += onConfirm    = ctx => OnConfirm?.Invoke();
 
         PIA.Player.Enable();
@@ -59,14 +64,25 @@ public class InputManager : MonoBehaviour
 
     void Start()
     {
-        sender.Init("10.87.8.231", Remoteport, 25666);
+        switch (IPIndex)
+        {
+            case 1:
+                IPAddress = IPAddress1;
+                break;
+            case 2:
+                IPAddress = IPAddress2;
+                break;
+        }
+
+        sender.Init(IPAddress, RemotePort, SourcePort);
         sender.SendString("Hello from Unity");
         Application.targetFrameRate = 60;
     }
 
     private void Update()
     {
-        if (NewData = sender.newdatahereboys)
+        NewData = sender.newdatahereboys;
+        if (NewData)
         {
             byte[] raw = sender.GetLatestUDPBytes();
             sender.newdatahereboys = false;
@@ -76,6 +92,7 @@ public class InputManager : MonoBehaviour
                 float x = BitConverter.ToSingle(raw, 0);
                 float y = BitConverter.ToSingle(raw, 4);
                 float z = BitConverter.ToSingle(raw, 8);
+
                 HandleNodeInput(x, y, z);
             }
         }
@@ -83,23 +100,22 @@ public class InputManager : MonoBehaviour
 
     private void HandleNodeInput(float x, float y, float z)
     {
-        if (UseFixedInputs)
+        NodeInput = new Vector3(x, y, z);
+
+        if (!UseFixedInputs)
         {
-            float newX = 0, newY = 0;
-
-            if (y > 2.0f)       newX = -1;
-            else if (y < -2.0f) newX = 1;
-
-            if (x > 2.0f)       newY = -1;
-            else if (x < -2.0f) newY = 1;
-
-            NodeInput = new Vector2(newX, newY);
-        }
-        else
-        {
-            NodeInput = new Vector2(y/-2, x/-2);
+            MoveInput = new Vector2(y/-2, x/-2);
+            return;
         }
 
-        Debug.Log($"Move Input Value : " + NodeInput);
+        float newX = 0, newY = 0;
+
+        if (y > 2.0f)       newX = -1;
+        else if (y < -2.0f) newX = 1;
+        if (x > 2.0f)       newY = -1;
+        else if (x < -2.0f) newY = 1;
+
+        MoveInput = new Vector2(newX, newY);
+        OnMove?.Invoke();
     }
 }

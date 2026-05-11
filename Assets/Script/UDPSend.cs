@@ -68,8 +68,6 @@ public class UDPSend
 
                 lastReceivedBytes = data;
                 newdatahereboys = true;
-
-                Debug.Log("New Data = " + newdatahereboys);
             }
             catch (Exception err)
             {

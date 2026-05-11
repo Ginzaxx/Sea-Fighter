@@ -12,9 +12,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float laneDistance = 2f;
     [SerializeField] private float moveSpeed = 15f;
     [SerializeField] private float moveInput;
-    
-    private float targetX = 0f;
     private Vector2 lastInput = Vector2.zero;
+    private float targetX = 0f;
 
     private void OnSub()
     {
