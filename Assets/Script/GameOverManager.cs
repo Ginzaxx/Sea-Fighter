@@ -1,12 +1,14 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using TMPro; // Diperlukan untuk TextMeshPro
+using TMPro;
 using System.Collections;
-using UnityEngine.Serialization;
 
 public class GameOverManager : MonoBehaviour
 {
+    private static readonly WaitForSeconds _waitForSeconds0_5 = new(0.5f);
+    private static readonly WaitForSeconds _waitForSeconds1 = new(1f);
+
     [Header("Game Rules")]
     [SerializeField] private float survivalGoalTime = 60f;
     [SerializeField] private string mainMenuSceneName = "Main Menu";
@@ -21,10 +23,8 @@ public class GameOverManager : MonoBehaviour
 
     [Header("Game Over Navigation")]
     [SerializeField] private RectTransform mainMenuBtnRect;
-    [FormerlySerializedAs("playAgainBtnRect")]
     [SerializeField] private RectTransform continueBtnRect;
     [SerializeField] private Image mainMenuBtnImage;
-    [FormerlySerializedAs("playAgainBtnImage")]
     [SerializeField] private Image continueBtnImage;
     [SerializeField] private TextMeshProUGUI continueBtnText;
     [SerializeField] private float selectedScale = 1.2f;
@@ -92,13 +92,13 @@ public class GameOverManager : MonoBehaviour
         if (countdownText != null)
         {
             countdownText.text = "3";
-            yield return new WaitForSeconds(1f);
+            yield return _waitForSeconds1;
             countdownText.text = "2";
-            yield return new WaitForSeconds(1f);
+            yield return _waitForSeconds1;
             countdownText.text = "1";
-            yield return new WaitForSeconds(1f);
+            yield return _waitForSeconds1;
             countdownText.text = "START!";
-            yield return new WaitForSeconds(0.5f);
+            yield return _waitForSeconds0_5;
         }
 
         if (startPanel != null) startPanel.SetActive(false);

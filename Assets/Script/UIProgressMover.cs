@@ -5,7 +5,7 @@ public class UIProgressMover : MonoBehaviour
     [Header("UI Settings")]
     [SerializeField] private RectTransform uiElement;
     [SerializeField] private float minY = -420f;
-    [SerializeField] private float maxY = 450f;
+    [SerializeField] private float maxY = 420f;
 
     private void Start()
     {
