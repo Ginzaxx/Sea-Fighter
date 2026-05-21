@@ -134,7 +134,6 @@ public class GameOverManager : MonoBehaviour
     {
         if (UnityEngine.InputSystem.Keyboard.current == null) return;
 
-        // Navigasi A (Kiri) dan D (Kanan)
         if (UnityEngine.InputSystem.Keyboard.current.aKey.wasPressedThisFrame)
         {
             selectedGameOverIndex = 0;
@@ -144,18 +143,22 @@ public class GameOverManager : MonoBehaviour
             selectedGameOverIndex = 1;
         }
 
-        // Visual Feedback Scaling
         if (mainMenuBtnRect != null)
             mainMenuBtnRect.localScale = Vector3.Lerp(mainMenuBtnRect.localScale, Vector3.one * (selectedGameOverIndex == 0 ? selectedScale : normalScale), Time.deltaTime * 10f);
         if (continueBtnRect != null)
             continueBtnRect.localScale = Vector3.Lerp(continueBtnRect.localScale, Vector3.one * (selectedGameOverIndex == 1 ? selectedScale : normalScale), Time.deltaTime * 10f);
 
-        // Konfirmasi
         if (UnityEngine.InputSystem.Keyboard.current.enterKey.wasPressedThisFrame)
         {
             if (selectedGameOverIndex == 0) StartCoroutine(LoadSceneRoutine(mainMenuSceneName, mainMenuBtnImage));
             else StartCoroutine(LoadSceneRoutine(nextSceneName, continueBtnImage));
         }
+    }
+
+    private void OnMove()
+    {
+        selectedGameOverIndex = (selectedGameOverIndex == 0) ? 1 : 0;
+        Debug.Log("Selected: " + (selectedGameOverIndex == 0 ? "Play" : "Exit"));
     }
 
     private IEnumerator LoadSceneRoutine(string sceneName, Image buttonImage)
@@ -168,7 +171,6 @@ public class GameOverManager : MonoBehaviour
 
         isTransitioning = true;
 
-        // Efek menggelap
         if (buttonImage != null) buttonImage.color = pressedColor;
 
         yield return new WaitForSeconds(loadDelay);

@@ -12,10 +12,11 @@ public class InputManager : MonoBehaviour
 
     [Header("NodeMCU Connections")]
     [SerializeField] private bool NewData;
-    [SerializeField] private int IPIndex = 2;
+    [SerializeField] private int IPIndex = 3;
     private readonly UDPSend sender = new();
-    private readonly string IPAddress1 = "10.87.8.231";
-    private readonly string IPAddress2 = "10.11.183.231";
+    [SerializeField] private string IPAddress1 = "10.87.8.231";
+    [SerializeField] private string IPAddress2 = "10.11.183.231";
+    [SerializeField] private string IPAddress3 = "10.58.201.205";
     [SerializeField] private string IPAddress = "";
     [SerializeField] private int RemotePort = 25666;
     [SerializeField] private int SourcePort = 25666;
@@ -71,6 +72,9 @@ public class InputManager : MonoBehaviour
                 break;
             case 2:
                 IPAddress = IPAddress2;
+                break;
+            case 3:
+                IPAddress = IPAddress3;
                 break;
         }
 
