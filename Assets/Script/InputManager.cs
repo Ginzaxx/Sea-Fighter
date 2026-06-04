@@ -5,21 +5,17 @@ using UnityEngine.InputSystem;
 public class InputManager : MonoBehaviour
 {
     public static InputManager Instance { get; private set; }
+    public PlayerInputs PIA;
     public Vector2 MoveInput;
     public Vector3 NodeInput;
-    public PlayerInputs PIA;
     public bool UseFixedInputs = true;
 
     [Header("NodeMCU Connections")]
     [SerializeField] private bool NewData;
-    [SerializeField] private int IPIndex = 3;
-    private readonly UDPSend sender = new();
-    [SerializeField] private string IPAddress1 = "10.87.8.231";
-    [SerializeField] private string IPAddress2 = "10.11.183.231";
-    [SerializeField] private string IPAddress3 = "10.58.201.205";
     [SerializeField] private string IPAddress = "";
     [SerializeField] private int RemotePort = 25666;
     [SerializeField] private int SourcePort = 25666;
+    private readonly UDPReceive receiver = new();
 
     public event Action OnMove, OnConfirm;
     private Action<InputAction.CallbackContext> onMove, offMove, onConfirm;
@@ -55,41 +51,27 @@ public class InputManager : MonoBehaviour
         PIA.Player.Disable();
         PIA.Dispose();
 
-        sender.ClosePorts();
+        receiver.ClosePorts();
     }
 
     private void OnApplicationQuit()
     {
-        sender.ClosePorts();
+        receiver.ClosePorts();
     }
 
     void Start()
     {
-        switch (IPIndex)
-        {
-            case 1:
-                IPAddress = IPAddress1;
-                break;
-            case 2:
-                IPAddress = IPAddress2;
-                break;
-            case 3:
-                IPAddress = IPAddress3;
-                break;
-        }
-
-        sender.Init(IPAddress, RemotePort, SourcePort);
-        sender.SendString("Hello from Unity");
+        receiver.Init(IPAddress, RemotePort, SourcePort);
         Application.targetFrameRate = 60;
     }
 
     private void Update()
     {
-        NewData = sender.newdatahereboys;
+        NewData = receiver.newdatahereboys;
         if (NewData)
         {
-            byte[] raw = sender.GetLatestUDPBytes();
-            sender.newdatahereboys = false;
+            byte[] raw = receiver.GetLatestUDPBytes();
+            receiver.newdatahereboys = false;
 
             if (raw != null && raw.Length == 12)
             {

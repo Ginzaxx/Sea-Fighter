@@ -7,11 +7,16 @@
 const char* ssid = "LogicLover";
 const char* password = "IceBender";
 
-IPAddress unityIP(10, 27, 205, 231);
+// IP Unity / Computer
+IPAddress unityIP(10, 193, 132, 231);
+// Port Unity / Computer
 unsigned int unityPort = 25666;
 
-IPAddress ip(10, 27, 205, 231);
-IPAddress gateway(10, 27, 205, 80);
+// IP NodeMCU / Controller
+IPAddress ip(10, 193, 132, 232);
+// Gateway NodeMCU / Controller
+IPAddress gateway(10, 193, 132, 167);
+// Subnet NodeMCU / Controller
 IPAddress subnet(255, 255, 255, 0);
 
 WiFiUDP Udp;
