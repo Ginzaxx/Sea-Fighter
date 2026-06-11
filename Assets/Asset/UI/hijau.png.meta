@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: bf21248ccf9d1d14aae4840e59a28fe8
+guid: 20ef363f5b3f2424994c04407b728fe9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1259793511530072976
-    second: UI jarak finis_0
+      213: -5495037619095701874
+    second: hijau_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,67 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: UI jarak finis_0
+      name: hijau_0
       rect:
         serializedVersion: 2
-        x: 4
+        x: 0
         y: 0
-        width: 24
-        height: 512
+        width: 32
+        height: 96
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 07478e6d970548ee0800000000000000
-      internalID: -1259793511530072976
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: UI jarak finis_1
-      rect:
-        serializedVersion: 2
-        x: 4
-        y: 0
-        width: 24
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8f94abe87bae46d4aa7263a5863b2e34
-      internalID: 1164332637
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: UI jarak finis_2
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 256
-        width: 32
-        height: 256
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4f56b4b0edb0c8c44abc0857f42c5046
-      internalID: 1638860945
+      spriteID: e86746e3664bdb3b0800000000000000
+      internalID: -5495037619095701874
       vertices: []
       indices: 
       edges: []
@@ -182,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -192,9 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      UI jarak finis_0: -1259793511530072976
-      UI jarak finis_1: 1164332637
-      UI jarak finis_2: 1638860945
+      hijau_0: -5495037619095701874
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

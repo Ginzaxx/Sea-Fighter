@@ -9,8 +9,8 @@ public class EnemySpawner : MonoBehaviour
     
     [Header("Spawn Settings")]
     [SerializeField] private Transform[] spawnPoints;
-    [SerializeField] private float initialSpawnInterval = 2f;
-    [SerializeField] private float minSpawnInterval = 0.75f;
+    [SerializeField] private float initialSpawnInterval = 3f;
+    [SerializeField] private float minSpawnInterval = 1.5f;
     [SerializeField] private float intervalDecreasePerSecond = 0.02f; // Berkurang per detik
     [SerializeField] private float enemySpeed = 5f;
 

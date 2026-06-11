@@ -47,8 +47,10 @@ public class MainMenuManager : MonoBehaviour
 
     private void OnConfirm()
     {
-        if (selectedIndex == 0) StartCoroutine(PlayGameRoutine());
-        else StartCoroutine(ExitGameRoutine());
+        if (selectedIndex == 0)
+            StartCoroutine(PlayGameRoutine());
+        else
+            StartCoroutine(ExitGameRoutine());
     }
 
     private void OnMove()

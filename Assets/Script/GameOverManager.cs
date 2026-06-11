@@ -6,11 +6,14 @@ using System.Collections;
 
 public class GameOverManager : MonoBehaviour
 {
+    private static readonly WaitForSeconds _waitForSeconds0_5 = new(0.5f);
+    private static readonly WaitForSeconds _waitForSeconds1 = new(1f);
+
     [Header("Game Rules")]
     [SerializeField] private float survivalGoalTime = 60f;
     [SerializeField] private string mainMenuSceneName = "Main Menu";
 
-    [Header("Game Over UI")]
+    [Header("UI Elements")]
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private TextMeshProUGUI resultText;
     
@@ -20,15 +23,28 @@ public class GameOverManager : MonoBehaviour
 
     [Header("Game Over Navigation")]
     [SerializeField] private RectTransform mainMenuBtnRect;
-    [SerializeField] private RectTransform playAgainBtnRect;
+    [SerializeField] private RectTransform continueBtnRect;
     [SerializeField] private Image mainMenuBtnImage;
-    [SerializeField] private Image playAgainBtnImage;
-    [SerializeField] private int selectedGameOverIndex = 1; // 0: Main Menu, 1: Play Again
-    [SerializeField] private float selectionInput;
+    [SerializeField] private Image continueBtnImage;
+    [SerializeField] private TextMeshProUGUI continueBtnText;
     [SerializeField] private float selectedScale = 1.2f;
     [SerializeField] private float normalScale = 1.0f;
+    [SerializeField] private Color pressedColor = new Color(0.5f, 0.5f, 0.5f, 1f);
     [SerializeField] private float loadDelay = 0.5f;
-    [SerializeField] private Color pressedColor = new(0.5f, 0.5f, 0.5f, 1f);
+
+    [Header("Next Level Settings")]
+    [SerializeField] private string nextSceneName;
+#if UNITY_EDITOR
+    [SerializeField] private UnityEditor.SceneAsset nextSceneAsset;
+
+    private void OnValidate()
+    {
+        if (nextSceneAsset != null)
+        {
+            nextSceneName = nextSceneAsset.name;
+        }
+    }
+#endif
 
     [Header("Score Settings")]
     [SerializeField] private TextMeshProUGUI scoreText;
@@ -46,6 +62,8 @@ public class GameOverManager : MonoBehaviour
     [SerializeField] private bool isGameStarted = false;
     private bool isTransitioning = false;
 
+    private int selectedGameOverIndex = 1; // 0: Main Menu, 1: Continue
+
     public static GameOverManager Instance { get; private set; }
     public bool IsGameFinished => isGameFinished;
     public bool IsGameStarted  => isGameStarted;
@@ -58,18 +76,7 @@ public class GameOverManager : MonoBehaviour
         else Destroy(gameObject);
 
         if (gameOverPanel != null) gameOverPanel.SetActive(false);
-    }
-
-    void OnEnable()
-    {
-        InputManager.Instance.OnMove += OnMove;
-        InputManager.Instance.OnConfirm += OnConfirm;
-    }
-
-    void OnDisable()
-    {
-        InputManager.Instance.OnMove -= OnMove;
-        InputManager.Instance.OnConfirm -= OnConfirm;
+        if (continueBtnText != null) continueBtnText.text = "Continue";
     }
 
     private void Start()
@@ -85,13 +92,13 @@ public class GameOverManager : MonoBehaviour
         if (countdownText != null)
         {
             countdownText.text = "3";
-            yield return new WaitForSeconds(1f);
+            yield return _waitForSeconds1;
             countdownText.text = "2";
-            yield return new WaitForSeconds(1f);
+            yield return _waitForSeconds1;
             countdownText.text = "1";
-            yield return new WaitForSeconds(1f);
+            yield return _waitForSeconds1;
             countdownText.text = "START!";
-            yield return new WaitForSeconds(0.5f);
+            yield return _waitForSeconds0_5;
         }
 
         if (startPanel != null) startPanel.SetActive(false);
@@ -123,40 +130,47 @@ public class GameOverManager : MonoBehaviour
         }
     }
 
-    private void OnMove()
-    {
-        if (!isGameFinished) return;
-
-        selectionInput = InputManager.Instance.MoveInput.x;
-        
-        if (selectionInput > 0) selectedGameOverIndex = 1;
-        if (selectionInput < 0) selectedGameOverIndex = 0;
-    }
-
-    private void OnConfirm()
-    {
-        if (!isGameFinished) return;
-
-        if (selectedGameOverIndex == 0) StartCoroutine(LoadSceneRoutine(mainMenuSceneName, mainMenuBtnImage));
-        else StartCoroutine(LoadSceneRoutine(SceneManager.GetActiveScene().name, playAgainBtnImage));
-    }
-
     private void HandleGameOverInput()
     {
-        if (!isGameFinished) return;
+        if (UnityEngine.InputSystem.Keyboard.current == null) return;
 
-        // Visual Feedback Scaling
+        if (UnityEngine.InputSystem.Keyboard.current.aKey.wasPressedThisFrame)
+        {
+            selectedGameOverIndex = 0;
+        }
+        if (UnityEngine.InputSystem.Keyboard.current.dKey.wasPressedThisFrame)
+        {
+            selectedGameOverIndex = 1;
+        }
+
         if (mainMenuBtnRect != null)
             mainMenuBtnRect.localScale = Vector3.Lerp(mainMenuBtnRect.localScale, Vector3.one * (selectedGameOverIndex == 0 ? selectedScale : normalScale), Time.deltaTime * 10f);
-        if (playAgainBtnRect != null)
-            playAgainBtnRect.localScale = Vector3.Lerp(playAgainBtnRect.localScale, Vector3.one * (selectedGameOverIndex == 1 ? selectedScale : normalScale), Time.deltaTime * 10f);
+        if (continueBtnRect != null)
+            continueBtnRect.localScale = Vector3.Lerp(continueBtnRect.localScale, Vector3.one * (selectedGameOverIndex == 1 ? selectedScale : normalScale), Time.deltaTime * 10f);
+
+        if (UnityEngine.InputSystem.Keyboard.current.enterKey.wasPressedThisFrame)
+        {
+            if (selectedGameOverIndex == 0) StartCoroutine(LoadSceneRoutine(mainMenuSceneName, mainMenuBtnImage));
+            else StartCoroutine(LoadSceneRoutine(nextSceneName, continueBtnImage));
+        }
+    }
+
+    private void OnMove()
+    {
+        selectedGameOverIndex = (selectedGameOverIndex == 0) ? 1 : 0;
+        Debug.Log("Selected: " + (selectedGameOverIndex == 0 ? "Play" : "Exit"));
     }
 
     private IEnumerator LoadSceneRoutine(string sceneName, Image buttonImage)
     {
+        if (string.IsNullOrEmpty(sceneName))
+        {
+            Debug.LogError("Scene name is empty! Please assign a next scene in the inspector.");
+            yield break;
+        }
+
         isTransitioning = true;
 
-        // Efek menggelap
         if (buttonImage != null) buttonImage.color = pressedColor;
 
         yield return new WaitForSeconds(loadDelay);
