@@ -5,19 +5,15 @@ using UnityEngine.InputSystem;
 public class InputManager : MonoBehaviour
 {
     public static InputManager Instance { get; private set; }
-    public PlayerInputs PIA;
+    private PlayerInputs PIA;
+    private UDPReceive receiver;
+
+    [Header("NodeMCU & Move Inputs")]
     public Vector2 MoveInput;
-    public Vector3 NodeInput;
-    public bool UseFixedInputs = true;
+    public bool UseFixedInputs;
+    public bool NewData;
 
-    [Header("NodeMCU Connections")]
-    [SerializeField] private bool NewData;
-    [SerializeField] private string IPAddress = "";
-    [SerializeField] private int RemotePort = 25666;
-    [SerializeField] private int SourcePort = 25666;
-    private readonly UDPReceive receiver = new();
-
-    public event Action OnMove, OnConfirm;
+    public event Action OnMove, OffMove, OnConfirm;
     private Action<InputAction.CallbackContext> onMove, offMove, onConfirm;
 
     private void Awake()
@@ -30,15 +26,21 @@ public class InputManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(this);
 
+        Application.targetFrameRate = 60;
+        receiver = new();
         PIA = new();
     }
 
     private void OnEnable()
     {
-        PIA.Player.Move.performed       += onMove       = ctx => { MoveInput = ctx.ReadValue<Vector2>(); OnMove?.Invoke(); };
-        PIA.Player.Move.canceled        += offMove      = ctx => MoveInput = Vector2.zero;
-        PIA.Player.Confirm.performed    += onConfirm    = ctx => OnConfirm?.Invoke();
+        PIA.Player.Move.performed       += onMove       = ctx =>
+            { MoveInput = ctx.ReadValue<Vector2>(); OnMove?.Invoke(); };
+        PIA.Player.Move.canceled        += offMove      = ctx =>
+            { MoveInput = Vector2.zero;             OffMove?.Invoke(); };
+        PIA.Player.Confirm.performed    += onConfirm    = ctx => 
+            { OnConfirm?.Invoke(); };
 
+        receiver.OpenPorts();
         PIA.Player.Enable();
     }
 
@@ -48,30 +50,17 @@ public class InputManager : MonoBehaviour
         PIA.Player.Move.canceled        -= offMove;
         PIA.Player.Confirm.performed    -= onConfirm;
 
+        receiver.ClosePorts();
         PIA.Player.Disable();
         PIA.Dispose();
-
-        receiver.ClosePorts();
-    }
-
-    private void OnApplicationQuit()
-    {
-        receiver.ClosePorts();
-    }
-
-    void Start()
-    {
-        receiver.Init(IPAddress, RemotePort, SourcePort);
-        Application.targetFrameRate = 60;
     }
 
     private void Update()
     {
-        NewData = receiver.newdatahereboys;
-        if (NewData)
+        if (NewData = receiver.newDataReceived)
         {
-            byte[] raw = receiver.GetLatestUDPBytes();
-            receiver.newdatahereboys = false;
+            byte[] raw = receiver.lastReceivedBytes;
+            receiver.newDataReceived = false;
 
             if (raw != null && raw.Length == 12)
             {
@@ -86,22 +75,26 @@ public class InputManager : MonoBehaviour
 
     private void HandleNodeInput(float x, float y, float z)
     {
-        NodeInput = new Vector3(x, y, z);
-
         if (!UseFixedInputs)
         {
-            MoveInput = new Vector2(y/-2, x/-2);
+            MoveInput = new Vector2(-y, -x);
             return;
         }
 
-        float newX = 0, newY = 0;
+        float newX = 0;
+        if (y < -2.0f)      newX = 1;
+        else if (y > 2.0f)  newX = -1;
 
-        if (y > 2.0f)       newX = -1;
-        else if (y < -2.0f) newX = 1;
-        if (x > 2.0f)       newY = -1;
-        else if (x < -2.0f) newY = 1;
+        float newY = 0;
+        if (x < -2.0f)      newY = 1;
+        else if (x > 2.0f)  newY = -1;
 
         MoveInput = new Vector2(newX, newY);
         OnMove?.Invoke();
+    }
+
+    public void ToggleFixedInputs()
+    {
+        UseFixedInputs = !UseFixedInputs;
     }
 }

@@ -4,19 +4,21 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_ADXL345_U.h>
 
+// Hotspot Name / SSID
 const char* ssid = "LogicLover";
+// Hotspot Password
 const char* password = "IceBender";
 
-// IP Unity / Computer
+// Unity IP
 IPAddress unityIP(10, 193, 132, 231);
-// Port Unity / Computer
+// Unity Port
 unsigned int unityPort = 25666;
 
-// IP NodeMCU / Controller
+// NodeMCU IP
 IPAddress ip(10, 193, 132, 232);
-// Gateway NodeMCU / Controller
+// NodeMCU Gateway
 IPAddress gateway(10, 193, 132, 167);
-// Subnet NodeMCU / Controller
+// NodeMCU Subnet
 IPAddress subnet(255, 255, 255, 0);
 
 WiFiUDP Udp;
