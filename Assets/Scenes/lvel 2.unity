@@ -2584,7 +2584,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -8853,21 +8853,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   survivalGoalTime: 60
   mainMenuSceneName: Main Menu
-  gameOverPanel: {fileID: 0}
-  resultText: {fileID: 0}
-  startPanel: {fileID: 0}
-  countdownText: {fileID: 0}
-  mainMenuBtnRect: {fileID: 0}
-  continueBtnRect: {fileID: 0}
-  mainMenuBtnImage: {fileID: 0}
-  continueBtnImage: {fileID: 0}
-  continueBtnText: {fileID: 0}
+  gameOverPanel: {fileID: 594233581}
+  resultText: {fileID: 1490478192}
+  startPanel: {fileID: 421996040}
+  countdownText: {fileID: 2018164984}
+  mainMenuBtnRect: {fileID: 845278054}
+  continueBtnRect: {fileID: 777937299}
+  mainMenuBtnImage: {fileID: 845278056}
+  continueBtnImage: {fileID: 777937301}
+  continueBtnText: {fileID: 12409861}
   selectedScale: 1.2
   normalScale: 1
   pressedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   loadDelay: 0.5
   nextSceneName: lvel 3
-  nextSceneAsset: {fileID: 102900000, guid: ad0e22b0fb4330f4f9d790900020d23c, type: 3}
+  nextSceneAsset: {fileID: 102900000, guid: d1f00b9baeb9d3d4fb802161b5b10f92, type: 3}
   scoreText: {fileID: 0}
   winSpriteTransform: {fileID: 72279693}
   transitionDuration: 3
@@ -10213,7 +10213,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -11552,7 +11552,7 @@ SceneRoots:
   - {fileID: 983244917}
   - {fileID: 1641806792}
   - {fileID: 1493797523}
+  - {fileID: 319898185}
   - {fileID: 1728397427}
   - {fileID: 72279693}
   - {fileID: 179471877}
-  - {fileID: 319898185}

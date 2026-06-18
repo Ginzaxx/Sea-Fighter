@@ -1902,7 +1902,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -5668,10 +5668,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Rb2D: {fileID: 983244914}
-  playerHealth: {fileID: 983244918}
+  health: {fileID: 0}
   laneDistance: 2
   moveSpeed: 15
   moveInput: 0
+  targetX: 0
 --- !u!61 &983244913
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -7514,7 +7515,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -9020,13 +9021,13 @@ MonoBehaviour:
   continueBtnRect: {fileID: 708440756}
   mainMenuBtnImage: {fileID: 629582075}
   continueBtnImage: {fileID: 708440758}
-  continueBtnText: {fileID: 0}
+  continueBtnText: {fileID: 1480117629}
   selectedScale: 1.2
   normalScale: 1
   pressedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   loadDelay: 0.5
-  nextSceneName: lvel 3
-  nextSceneAsset: {fileID: 102900000, guid: d1f00b9baeb9d3d4fb802161b5b10f92, type: 3}
+  nextSceneName: lvel 2
+  nextSceneAsset: {fileID: 102900000, guid: 3b41ce7f8467190498983527823a9fc2, type: 3}
   scoreText: {fileID: 429750540}
   winSpriteTransform: {fileID: 72279693}
   transitionDuration: 3

@@ -8621,22 +8621,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   survivalGoalTime: 60
   mainMenuSceneName: Main Menu
-  gameOverPanel: {fileID: 0}
-  resultText: {fileID: 0}
-  startPanel: {fileID: 0}
-  countdownText: {fileID: 0}
-  mainMenuBtnRect: {fileID: 0}
-  continueBtnRect: {fileID: 0}
-  mainMenuBtnImage: {fileID: 0}
-  continueBtnImage: {fileID: 0}
-  continueBtnText: {fileID: 0}
+  gameOverPanel: {fileID: 1104656565}
+  resultText: {fileID: 1834940324}
+  startPanel: {fileID: 48090682}
+  countdownText: {fileID: 2082488610}
+  mainMenuBtnRect: {fileID: 740144929}
+  continueBtnRect: {fileID: 2028969969}
+  mainMenuBtnImage: {fileID: 740144931}
+  continueBtnImage: {fileID: 2028969971}
+  continueBtnText: {fileID: 104392536}
   selectedScale: 1.2
   normalScale: 1
   pressedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   loadDelay: 0.5
-  nextSceneName: lvel 2
-  nextSceneAsset: {fileID: 102900000, guid: d1f00b9baeb9d3d4fb802161b5b10f92, type: 3}
-  scoreText: {fileID: 0}
+  nextSceneName: Main Menu
+  nextSceneAsset: {fileID: 102900000, guid: 15737594cc0e8a64eb04361c9f58ff3d, type: 3}
+  scoreText: {fileID: 3318554}
   winSpriteTransform: {fileID: 72279693}
   transitionDuration: 3
   startY: 9
@@ -11552,7 +11552,7 @@ SceneRoots:
   - {fileID: 983244917}
   - {fileID: 1641806792}
   - {fileID: 1493797523}
-  - {fileID: 1728397427}
-  - {fileID: 55782841}
-  - {fileID: 72279693}
   - {fileID: 300068995}
+  - {fileID: 1728397427}
+  - {fileID: 72279693}
+  - {fileID: 55782841}
