@@ -5358,9 +5358,9 @@ MonoBehaviour:
   flashInterval: 0.15
   spriteRenderer: {fileID: 983244916}
   hpImages:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 885523828}
+  - {fileID: 1841057772}
+  - {fileID: 1857653948}
   lostHealthColor: {r: 0, g: 0, b: 0, a: 0.7058824}
   fullHealthColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &999865807
