@@ -2585,8 +2585,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 108
-  m_fontSizeBase: 108
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -4416,8 +4416,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 108
-  m_fontSizeBase: 108
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -8547,10 +8547,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   survivalGoalTime: 60
   mainMenuSceneName: Main Menu
-  gameOverPanel: {fileID: 2120764751}
-  resultText: {fileID: 564134392}
   startPanel: {fileID: 535588038}
-  countdownText: {fileID: 867988027}
+  startText: {fileID: 867988027}
+  startTextHere: Pelabuhan - Aru
+  gameOverPanel: {fileID: 2120764751}
+  gameOverText: {fileID: 564134392}
+  gameOverTextHere: 'Finish Level 6 : Selamat Datang di Samudera Pasai'
   mainMenuBtnRect: {fileID: 536938024}
   continueBtnRect: {fileID: 138854391}
   mainMenuBtnImage: {fileID: 536938026}

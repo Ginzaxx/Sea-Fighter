@@ -8182,8 +8182,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 108
-  m_fontSizeBase: 108
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -8729,10 +8729,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   survivalGoalTime: 60
   mainMenuSceneName: Main Menu
-  gameOverPanel: {fileID: 594233581}
-  resultText: {fileID: 1490478192}
   startPanel: {fileID: 421996040}
-  countdownText: {fileID: 2018164984}
+  startText: {fileID: 2018164984}
+  startTextHere: Pelabuhan - Tuban
+  gameOverPanel: {fileID: 594233581}
+  gameOverText: {fileID: 1490478192}
+  gameOverTextHere: 'Finish Level 2 : Selamat Datang di Sunda Kelapa'
   mainMenuBtnRect: {fileID: 845278054}
   continueBtnRect: {fileID: 777937299}
   mainMenuBtnImage: {fileID: 845278056}
@@ -10617,15 +10619,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 108
-  m_fontSizeBase: 108
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0

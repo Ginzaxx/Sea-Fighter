@@ -3594,8 +3594,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 108
-  m_fontSizeBase: 108
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -6016,8 +6016,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 108
-  m_fontSizeBase: 108
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -9017,10 +9017,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   survivalGoalTime: 60
   mainMenuSceneName: Main Menu
-  gameOverPanel: {fileID: 1469622130}
-  resultText: {fileID: 1003223592}
   startPanel: {fileID: 106123257}
-  countdownText: {fileID: 709564186}
+  startText: {fileID: 709564186}
+  startTextHere: Pelabuhan - Palembang
+  gameOverPanel: {fileID: 1469622130}
+  gameOverText: {fileID: 1003223592}
+  gameOverTextHere: 'Finish Level 4 : Selamat Datang di Jambi Dharmasraya'
   mainMenuBtnRect: {fileID: 629582073}
   continueBtnRect: {fileID: 708440756}
   mainMenuBtnImage: {fileID: 629582075}

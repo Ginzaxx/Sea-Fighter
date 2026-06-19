@@ -8621,10 +8621,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   survivalGoalTime: 60
   mainMenuSceneName: Main Menu
-  gameOverPanel: {fileID: 1104656565}
-  resultText: {fileID: 1834940324}
   startPanel: {fileID: 48090682}
-  countdownText: {fileID: 2082488610}
+  startText: {fileID: 2082488610}
+  startTextHere: Pelabuhan - Samudera Pasai
+  gameOverPanel: {fileID: 1104656565}
+  gameOverText: {fileID: 1834940324}
+  gameOverTextHere: 'Finish Level 7 : Selamat Datang di Lamuri Darussalam'
   mainMenuBtnRect: {fileID: 740144929}
   continueBtnRect: {fileID: 2028969969}
   mainMenuBtnImage: {fileID: 740144931}
@@ -9823,8 +9825,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 108
-  m_fontSizeBase: 108
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -11002,8 +11004,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 108
-  m_fontSizeBase: 108
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
