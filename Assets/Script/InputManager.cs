@@ -95,6 +95,6 @@ public class InputManager : MonoBehaviour
 
     public void ToggleFixedInputs()
     {
-        UseFixedInputs = !UseFixedInputs;
+        // UseFixedInputs = !UseFixedInputs;
     }
 }

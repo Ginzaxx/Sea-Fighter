@@ -17,9 +17,8 @@ public class UDPReceive
 
     public void OpenPorts()
     {
-        client = new UdpClient();
-        receiveThread = new Thread(new ThreadStart(ReceiveData))
-        { IsBackground = true };
+        client = new UdpClient(25666);
+        receiveThread = new Thread(new ThreadStart(ReceiveData)) { IsBackground = true };
         receiveThread.Start();
         Debug.Log("Opening UDP Bytes Receiver");
     }

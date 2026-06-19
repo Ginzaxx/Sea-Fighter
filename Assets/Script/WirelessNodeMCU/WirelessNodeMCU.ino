@@ -10,7 +10,7 @@ const char* ssid = "LogicLover";
 const char* password = "IceBender";
 
 // Unity IP
-IPAddress unityIP(10, 193, 132, 231);
+IPAddress unityIP(10, 193, 132, 233);
 // Unity Port
 unsigned int unityPort = 25666;
 
