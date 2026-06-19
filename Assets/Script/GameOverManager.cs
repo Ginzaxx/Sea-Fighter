@@ -8,18 +8,21 @@ public class GameOverManager : MonoBehaviour
 {
     private static readonly WaitForSeconds _waitForSeconds0_5 = new(0.5f);
     private static readonly WaitForSeconds _waitForSeconds1 = new(1f);
+    private static readonly WaitForSeconds _waitForSeconds5 = new(5f);
 
     [Header("Game Rules")]
     [SerializeField] private float survivalGoalTime = 60f;
     [SerializeField] private string mainMenuSceneName = "Main Menu";
 
-    [Header("UI Elements")]
-    [SerializeField] private GameObject gameOverPanel;
-    [SerializeField] private TextMeshProUGUI resultText;
-    
     [Header("Start UI")]
     [SerializeField] private GameObject startPanel;
-    [SerializeField] private TextMeshProUGUI countdownText;
+    [SerializeField] private TextMeshProUGUI startText;
+    [SerializeField] private string startTextHere;
+
+    [Header("Game Over UI")]
+    [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private TextMeshProUGUI gameOverText;
+    [SerializeField] private string gameOverTextHere;
 
     [Header("Game Over Navigation")]
     [SerializeField] private RectTransform mainMenuBtnRect;
@@ -29,7 +32,7 @@ public class GameOverManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI continueBtnText;
     [SerializeField] private float selectedScale = 1.2f;
     [SerializeField] private float normalScale = 1.0f;
-    [SerializeField] private Color pressedColor = new Color(0.5f, 0.5f, 0.5f, 1f);
+    [SerializeField] private Color pressedColor = new(0.5f, 0.5f, 0.5f, 1f);
     [SerializeField] private float loadDelay = 0.5f;
 
     [Header("Next Level Settings")]
@@ -89,15 +92,17 @@ public class GameOverManager : MonoBehaviour
         isGameStarted = false;
         if (startPanel != null) startPanel.SetActive(true);
 
-        if (countdownText != null)
+        if (startText != null)
         {
-            countdownText.text = "3";
+            startText.text = startTextHere;
+            yield return _waitForSeconds5;
+            startText.text = "3";
             yield return _waitForSeconds1;
-            countdownText.text = "2";
+            startText.text = "2";
             yield return _waitForSeconds1;
-            countdownText.text = "1";
+            startText.text = "1";
             yield return _waitForSeconds1;
-            countdownText.text = "START!";
+            startText.text = "START!";
             yield return _waitForSeconds0_5;
         }
 
@@ -182,7 +187,7 @@ public class GameOverManager : MonoBehaviour
         if (isGameFinished) return;
         isGameFinished = true;
 
-        ShowGameOverUI("Kamu Kalah!");
+        ShowGameOverUI("Ship Crashed!");
     }
 
     private void Win()
@@ -218,13 +223,13 @@ public class GameOverManager : MonoBehaviour
             yield return new WaitForSeconds(transitionDuration);
         }
 
-        ShowGameOverUI("Kamu Menang!");
+        ShowGameOverUI(gameOverTextHere);
     }
 
     private void ShowGameOverUI(string message)
     {
         if (gameOverPanel != null) gameOverPanel.SetActive(true);
-        if (resultText != null) resultText.text = message;
+        if (gameOverText != null) gameOverText.text = message;
         
         StopAllAnimations();
         
