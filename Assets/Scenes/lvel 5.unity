@@ -1328,15 +1328,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 108
-  m_fontSizeBase: 108
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -1939,8 +1939,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 108
-  m_fontSizeBase: 108
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -8927,10 +8927,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   survivalGoalTime: 60
   mainMenuSceneName: Main Menu
-  gameOverPanel: {fileID: 847809784}
-  resultText: {fileID: 308799088}
   startPanel: {fileID: 740728927}
-  countdownText: {fileID: 263269203}
+  startText: {fileID: 263269203}
+  startTextHere: Pelabuhan - Jambi Dharmasraya
+  gameOverPanel: {fileID: 847809784}
+  gameOverText: {fileID: 308799088}
+  gameOverTextHere: 'Finish Level 5 : Selamat Datang di Aru'
   mainMenuBtnRect: {fileID: 29720756}
   continueBtnRect: {fileID: 1466238450}
   mainMenuBtnImage: {fileID: 29720758}
