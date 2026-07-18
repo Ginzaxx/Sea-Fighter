@@ -17,13 +17,13 @@ public class PlayerMovement : MonoBehaviour
     private void OnSub()
     {
         InputManager.Instance.OnMove += OnMove;
-        InputManager.Instance.OnConfirm += OnConfirm;
+        InputManager.Instance.OnChange += OnChange;
     }
 
     private void OnUnsub()
     {
         InputManager.Instance.OnMove -= OnMove;
-        InputManager.Instance.OnConfirm -= OnConfirm;
+        InputManager.Instance.OnChange -= OnChange;
     }
 
     private void OnDestroy()
@@ -58,7 +58,7 @@ public class PlayerMovement : MonoBehaviour
         targetX = Mathf.Clamp(targetX, -laneDistance, laneDistance);
     }
 
-    private void OnConfirm()
+    private void OnChange()
     {
         InputManager.Instance.ToggleFixedInputs();
     }

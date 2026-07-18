@@ -108,6 +108,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Change"",
+                    ""type"": ""Button"",
+                    ""id"": ""9bd68b4b-0e97-495a-b008-93460733ffef"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -201,8 +210,8 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""b6e0cbbe-c03a-415a-b520-84a76e7870fa"",
-                    ""path"": ""<Keyboard>/enter"",
+                    ""id"": ""5e6b48c5-ebc5-4b0b-ad2a-a8762d222ad0"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -212,12 +221,23 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""5e6b48c5-ebc5-4b0b-ad2a-a8762d222ad0"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""id"": ""e3ddf7e1-c89e-4d89-a2fc-72cfd2d429c8"",
+                    ""path"": ""<Keyboard>/enter"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Confirm"",
+                    ""action"": ""Change"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""62260e85-f111-4094-84d8-0a04ee7d2930"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Change"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -230,6 +250,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Confirm = m_Player.FindAction("Confirm", throwIfNotFound: true);
+        m_Player_Change = m_Player.FindAction("Change", throwIfNotFound: true);
     }
 
     ~@PlayerInputs()
@@ -312,6 +333,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Confirm;
+    private readonly InputAction m_Player_Change;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -331,6 +353,10 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Confirm".
         /// </summary>
         public InputAction @Confirm => m_Wrapper.m_Player_Confirm;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/Change".
+        /// </summary>
+        public InputAction @Change => m_Wrapper.m_Player_Change;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -363,6 +389,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Confirm.started += instance.OnConfirm;
             @Confirm.performed += instance.OnConfirm;
             @Confirm.canceled += instance.OnConfirm;
+            @Change.started += instance.OnChange;
+            @Change.performed += instance.OnChange;
+            @Change.canceled += instance.OnChange;
         }
 
         /// <summary>
@@ -380,6 +409,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Confirm.started -= instance.OnConfirm;
             @Confirm.performed -= instance.OnConfirm;
             @Confirm.canceled -= instance.OnConfirm;
+            @Change.started -= instance.OnChange;
+            @Change.performed -= instance.OnChange;
+            @Change.canceled -= instance.OnChange;
         }
 
         /// <summary>
@@ -434,5 +466,12 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnConfirm(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Change" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnChange(InputAction.CallbackContext context);
     }
 }

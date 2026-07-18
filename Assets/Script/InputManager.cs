@@ -13,8 +13,8 @@ public class InputManager : MonoBehaviour
     public bool UseFixedInputs;
     public bool NewData;
 
-    public event Action OnMove, OffMove, OnConfirm;
-    private Action<InputAction.CallbackContext> onMove, offMove, onConfirm;
+    public event Action OnMove, OffMove, OnConfirm, OnChange;
+    private Action<InputAction.CallbackContext> onMove, offMove, onConfirm, onChange;
 
     private void Awake()
     {
@@ -39,6 +39,8 @@ public class InputManager : MonoBehaviour
             { MoveInput = Vector2.zero;             OffMove?.Invoke(); };
         PIA.Player.Confirm.performed    += onConfirm    = ctx => 
             { OnConfirm?.Invoke(); };
+        PIA.Player.Change.performed     += onChange     = ctx => 
+            { OnChange?.Invoke(); };
 
         receiver.OpenPorts();
         PIA.Player.Enable();
@@ -57,7 +59,8 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
-        if (NewData = receiver.newDataReceived)
+        NewData = receiver.newDataReceived;
+        if (NewData)
         {
             byte[] raw = receiver.lastReceivedBytes;
             receiver.newDataReceived = false;
@@ -95,6 +98,6 @@ public class InputManager : MonoBehaviour
 
     public void ToggleFixedInputs()
     {
-        // UseFixedInputs = !UseFixedInputs;
+        UseFixedInputs = !UseFixedInputs;
     }
 }
