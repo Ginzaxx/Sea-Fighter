@@ -100,4 +100,43 @@ public class InputManager : MonoBehaviour
     {
         UseFixedInputs = !UseFixedInputs;
     }
+
+    //[Header("Mobile Inputs")]
+    public void SetMobileMoveX(float xDir)
+    {
+        MoveInput = new Vector2(xDir, MoveInput.y);
+        OnMove?.Invoke();
+    }
+
+    public void ReleaseMobileMoveX(float xDir)
+    {
+        if (Mathf.Approximately(MoveInput.x, xDir))
+        {
+            MoveInput = new Vector2(0f, MoveInput.y);
+            OffMove?.Invoke();
+        }
+    }
+
+    public void SetMobileMoveInput(Vector2 dir)
+    {
+        MoveInput = dir;
+        if (dir != Vector2.zero)
+        {
+            OnMove?.Invoke();
+        }
+        else
+        {
+            OffMove?.Invoke();
+        }
+    }
+
+    public void TriggerConfirm()
+    {
+        OnConfirm?.Invoke();
+    }
+
+    public void TriggerChange()
+    {
+        OnChange?.Invoke();
+    }
 }
