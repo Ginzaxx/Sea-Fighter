@@ -588,8 +588,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 90
-  m_fontSizeBase: 90
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -6867,8 +6867,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 90
-  m_fontSizeBase: 90
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -11452,8 +11452,7 @@ MonoBehaviour:
   continueBtn: {fileID: 1697829917}
   continueBtnText: {fileID: 160125822}
   mainMenuBtnText: {fileID: 2083471287}
-  selectedScale: 1.2
-  normalScale: 1
+  selectedScaleMultiplier: 1.15
   pressedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   loadDelay: 0.5
   nextSceneName: lvel 6
