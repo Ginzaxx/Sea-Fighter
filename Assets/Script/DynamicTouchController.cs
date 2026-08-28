@@ -71,6 +71,11 @@ public class DynamicTouchController : MonoBehaviour, IPointerDownHandler, IPoint
     {
         isTouching = true;
 
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.PlayTouchSFX();
+        }
+
         if (InputManager.Instance != null)
         {
             InputManager.Instance.UseFixedInputs = true;

@@ -16,8 +16,8 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private float selectionInput;
 
     [Header("Feedback Settings")]
-    [SerializeField] private float selectedScale = 3.2f;
-    [SerializeField] private float normalScale = 3.0f;
+    [Tooltip("Multiplier applied to the button's original scale when selected or clicked (e.g. 1.15 = 15% larger)")]
+    [SerializeField] private float selectedScaleMultiplier = 1.15f;
     [SerializeField] private float scaleSpeed = 10f;
     [SerializeField] private float loadDelay = 0.5f;
     [SerializeField] private Color pressedColor = new(0.5f, 0.5f, 0.5f, 1f);
@@ -25,8 +25,18 @@ public class MainMenuManager : MonoBehaviour
     [Header("Scene Settings")]
     [SerializeField] private string gameSceneName = "Main Game";
     
-    private int selectedIndex = 0; // 0: Play, 1: Exit
+    private int selectedIndex = -1; // -1: None, 0: Play, 1: Exit
     private bool isTransitioning = false;
+
+    private Vector3 playInitialScale = Vector3.one;
+    private Vector3 exitInitialScale = Vector3.one;
+
+    private void Awake()
+    {
+        // Save the exact original scales set in the Inspector/Scene
+        if (playButtonRect != null) playInitialScale = playButtonRect.localScale;
+        if (exitButtonRect != null) exitInitialScale = exitButtonRect.localScale;
+    }
 
     private void Start()
     {
@@ -35,6 +45,11 @@ public class MainMenuManager : MonoBehaviour
 
         if (playButton != null) playButton.onClick.AddListener(OnPlayButtonClicked);
         if (exitButton != null) exitButton.onClick.AddListener(OnExitButtonClicked);
+
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.PlayMainMenuBGM();
+        }
     }
     
     void OnEnable()
@@ -58,6 +73,8 @@ public class MainMenuManager : MonoBehaviour
 
     private void OnConfirm()
     {
+        if (selectedIndex == -1) return;
+
         if (selectedIndex == 0)
             StartCoroutine(PlayGameRoutine());
         else
@@ -76,18 +93,20 @@ public class MainMenuManager : MonoBehaviour
 
     private void ApplyVisualFeedback()
     {
-        // Smooth scaling for visual feedback
-        float playTargetScale = (selectedIndex == 0) ? selectedScale : normalScale;
-        float exitTargetScale = (selectedIndex == 1) ? selectedScale : normalScale;
+        if (playButtonRect == null || exitButtonRect == null) return;
 
-        playButtonRect.localScale = Vector3.Lerp(playButtonRect.localScale, Vector3.one * playTargetScale, Time.deltaTime * scaleSpeed);
-        exitButtonRect.localScale = Vector3.Lerp(exitButtonRect.localScale, Vector3.one * exitTargetScale, Time.deltaTime * scaleSpeed);
+        // Calculate target scale relative to the initial scene scale
+        Vector3 playTargetScale = (selectedIndex == 0) ? (playInitialScale * selectedScaleMultiplier) : playInitialScale;
+        Vector3 exitTargetScale = (selectedIndex == 1) ? (exitInitialScale * selectedScaleMultiplier) : exitInitialScale;
+
+        playButtonRect.localScale = Vector3.Lerp(playButtonRect.localScale, playTargetScale, Time.deltaTime * scaleSpeed);
+        exitButtonRect.localScale = Vector3.Lerp(exitButtonRect.localScale, exitTargetScale, Time.deltaTime * scaleSpeed);
     }
 
     private IEnumerator PlayGameRoutine()
     {
         isTransitioning = true;
-        playButtonImage.color = pressedColor;
+        if (playButtonImage != null) playButtonImage.color = pressedColor;
 
         yield return new WaitForSeconds(loadDelay);
         SceneManager.LoadScene(gameSceneName);
@@ -96,7 +115,7 @@ public class MainMenuManager : MonoBehaviour
     private IEnumerator ExitGameRoutine()
     {
         isTransitioning = true;
-        exitButtonImage.color = pressedColor;
+        if (exitButtonImage != null) exitButtonImage.color = pressedColor;
 
         yield return new WaitForSeconds(loadDelay);
         Debug.Log("Exiting Game...");
@@ -106,6 +125,7 @@ public class MainMenuManager : MonoBehaviour
     public void OnPlayButtonClicked()
     {
         if (isTransitioning) return;
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayTouchSFX();
         selectedIndex = 0;
         ApplyVisualFeedback();
         StartCoroutine(PlayGameRoutine());
@@ -114,6 +134,7 @@ public class MainMenuManager : MonoBehaviour
     public void OnExitButtonClicked()
     {
         if (isTransitioning) return;
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayTouchSFX();
         selectedIndex = 1;
         ApplyVisualFeedback();
         StartCoroutine(ExitGameRoutine());
