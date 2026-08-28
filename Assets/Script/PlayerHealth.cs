@@ -35,6 +35,11 @@ public class PlayerHealth : MonoBehaviour
         UpdateHPUI();
         Debug.Log("Player HP: " + currentHealth);
 
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.PlayCrashSFX();
+        }
+
         if (currentHealth <= 0)
         {
             GameOverManager.Instance.PlayerDied();
