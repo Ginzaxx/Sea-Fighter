@@ -11,8 +11,6 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private RectTransform exitButtonRect;
     [SerializeField] private Image playButtonImage;
     [SerializeField] private Image exitButtonImage;
-    [SerializeField] private Button playButton;
-    [SerializeField] private Button exitButton;
     [SerializeField] private float selectionInput;
 
     [Header("Feedback Settings")]
@@ -24,19 +22,10 @@ public class MainMenuManager : MonoBehaviour
 
     [Header("Scene Settings")]
     [SerializeField] private string gameSceneName = "Main Game";
-    
+
     private int selectedIndex = 0; // 0: Play, 1: Exit
     private bool isTransitioning = false;
 
-    private void Start()
-    {
-        if (playButton == null && playButtonRect != null) playButton = playButtonRect.GetComponent<Button>();
-        if (exitButton == null && exitButtonRect != null) exitButton = exitButtonRect.GetComponent<Button>();
-
-        if (playButton != null) playButton.onClick.AddListener(OnPlayButtonClicked);
-        if (exitButton != null) exitButton.onClick.AddListener(OnExitButtonClicked);
-    }
-    
     void OnEnable()
     {
         InputManager.Instance.OnMove += OnMove;
@@ -101,31 +90,5 @@ public class MainMenuManager : MonoBehaviour
         yield return new WaitForSeconds(loadDelay);
         Debug.Log("Exiting Game...");
         Application.Quit();
-    }
-
-    public void OnPlayButtonClicked()
-    {
-        if (isTransitioning) return;
-        selectedIndex = 0;
-        ApplyVisualFeedback();
-        StartCoroutine(PlayGameRoutine());
-    }
-
-    public void OnExitButtonClicked()
-    {
-        if (isTransitioning) return;
-        selectedIndex = 1;
-        ApplyVisualFeedback();
-        StartCoroutine(ExitGameRoutine());
-    }
-
-    public void SelectPlay()
-    {
-        if (!isTransitioning) selectedIndex = 0;
-    }
-
-    public void SelectExit()
-    {
-        if (!isTransitioning) selectedIndex = 1;
     }
 }
